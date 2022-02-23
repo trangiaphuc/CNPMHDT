@@ -1,0 +1,7 @@
+database: 
+Entity Relationship Diagram: https://dbdiagram.io/d/62163228485e43354303b8d6
+
+Usecase:
+Usecase Diagram:
+Usecase Script:
+Usecase Short Script: https://docs.google.com/spreadsheets/d/1mMkFDw9uzB82C-NW8d0237Ktu7006KG1fMgQ6y-WmxI/edit?usp=sharing
