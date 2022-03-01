@@ -4,7 +4,7 @@ Project môn Công nghệ phầm mềm HĐT - Web bán hàng Online Sản phẩm
 
 ## BackEnd:
 
-- create database name: **foodandcook** in your mysql
+  - create database name: **database_development** in your mysql
   - cd be/app
   - yarn - with yarn/ npm install -with npm
   - yarn start - with yarn/ npm start - with npm
