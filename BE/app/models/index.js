@@ -60,8 +60,8 @@ db.userStatuses = require('../models/userstatuses')(sequelize, Sequelize);
 db.wards = require('../models/wards')(sequelize, Sequelize);
 db.userRoles = sequelize.define('userRoles');
 //ket bang
-db.provinces.hasOne(db.users);
-db.districts.hasOne(db.users);
+db.provinces.belongsTo(db.users);
+db.districts.belongsTo(db.users);
 db.wards.hasOne(db.users);
 db.userStatuses.hasOne(db.users);
 db.users.belongsToMany(db.roles, {through: db.userRoles});
