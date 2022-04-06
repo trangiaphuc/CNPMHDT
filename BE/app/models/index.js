@@ -59,14 +59,20 @@ db.users = require('../models/users')(sequelize, Sequelize);
 db.userStatuses = require('../models/userstatuses')(sequelize, Sequelize);
 db.wards = require('../models/wards')(sequelize, Sequelize);
 db.userRoles = sequelize.define('userRoles');
+db.images = require('../models/images')(sequelize, Sequelize);
+
 //ket bang
-db.provinces.belongsTo(db.users);
-db.districts.belongsTo(db.users);
+db.provinces.hasOne(db.users);
+db.districts.hasOne(db.users);
 db.wards.hasOne(db.users);
 db.userStatuses.hasOne(db.users);
 db.users.belongsToMany(db.roles, {through: db.userRoles});
 db.roles.belongsToMany(db.users, {through: db.userRoles});
 db.maingroups.hasMany(db.subgroups);
+// db.maingroups.hasOne(db.products);
+// db.subgroups.hasOne(db.products);
+// db.maingroups.hasMany(db.products);
+// db.subgroups.hasMany(db.products);
 db.products.belongsTo(db.maingroups);
 db.products.belongsTo(db.subgroups);
 db.products.belongsTo(db.brands);
@@ -95,6 +101,8 @@ db.saleOrders.belongsTo(db.districts);
 db.saleOrders.belongsTo(db.wards);
 db.saleOrders.belongsTo(db.payableTypes);
 db.saleOrders.hasMany(db.saleOrderDetails);
+db.users.belongsTo(db.images);
+db.products.belongsTo(db.images);
 
 
 

@@ -30,5 +30,6 @@ db.sequelize.sync({
 //routes
 require('./routes/general.routes/auth.routes')(app);
 require('./routes/admin.routes/user.routes')(app);
+require('./routes/admin.routes/product.routes')(app);
 
 module.exports = app;
