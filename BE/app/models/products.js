@@ -39,44 +39,50 @@
 // };
 
 module.exports = (sequelize, DataTypes) => {
-  const product = sequelize.define("products", {
-      productName: {
-          type : DataTypes.STRING,
-      },
-      isRequestIMEI:{
-        type: DataTypes.BOOLEAN
-      },
-      VAT: {
-        type: DataTypes.FLOAT
-      },
-      deliveryVehicle: {
-        type: DataTypes.INTEGER
-      },
-      isInputIMEI: {
-        type: DataTypes.BOOLEAN
-      },
-      isGiftVoucher: {
-        type: DataTypes.BOOLEAN
-      },
-      isCanReturnOutput: {
-        type: DataTypes.BOOLEAN
-      },
-      isDelete: {
-        type: DataTypes.BOOLEAN
-      },
-      userCreate: {
-        type: DataTypes.INTEGER
-      },
-      userUpdate: {
-        type:DataTypes.INTEGER
-      },
-      userDelete: {
-        type: DataTypes.INTEGER
-      }
-    },{
-      indexes: [
-          {type: 'FULLTEXT', name: 'product_index', fields: ['productName']}
-      ]
-  });
-  return product;
-}
+    const product = sequelize.define(
+        "products", {
+            productName: {
+                type: DataTypes.STRING,
+            },
+            salePrice: {
+                type: DataTypes.FLOAT,
+            },
+
+            isRequestIMEI: {
+                type: DataTypes.BOOLEAN,
+            },
+            VAT: {
+                type: DataTypes.FLOAT,
+            },
+            deliveryVehicle: {
+                type: DataTypes.INTEGER,
+            },
+            isInputIMEI: {
+                type: DataTypes.BOOLEAN,
+            },
+            isGiftVoucher: {
+                type: DataTypes.BOOLEAN,
+            },
+            isCanReturnOutput: {
+                type: DataTypes.BOOLEAN,
+            },
+            isDelete: {
+                type: DataTypes.BOOLEAN,
+            },
+            userCreate: {
+                type: DataTypes.INTEGER,
+            },
+            userUpdate: {
+                type: DataTypes.INTEGER,
+            },
+            userDelete: {
+                type: DataTypes.INTEGER,
+            },
+        }, {
+            indexes: [
+                { type: "FULLTEXT", name: "product_index", fields: ["productName"] },
+            ],
+        }
+    );
+    return product;
+};
