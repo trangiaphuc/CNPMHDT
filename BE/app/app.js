@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const db = require("./models");
 // const logger = require('./app/winston/winston')
 
 var corsOptions = {
-  origin: "http://localhost:19006"
+    origin: "http://localhost:9000",
 };
 
 global.__basedir = __dirname;
@@ -20,16 +20,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //sequelize
-db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-db.sequelize.sync({
-  force: true 
-}).then(() => {
-  console.log("Dropped and Resync database");
-});
+db.sequelize.query("SET FOREIGN_KEY_CHECKS = 0");
+db.sequelize
+    .sync({
+        force: true,
+    })
+    .then(() => {
+        console.log("Dropped and Resync database");
+    });
 
 //routes
-require('./routes/general.routes/auth.routes')(app);
-require('./routes/admin.routes/user.routes')(app);
-require('./routes/admin.routes/product.routes')(app);
+require("./routes/general.routes/auth.routes")(app);
+require("./routes/admin.routes/user.routes")(app);
+require("./routes/admin.routes/product.routes")(app);
 
 module.exports = app;

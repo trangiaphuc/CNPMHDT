@@ -84,6 +84,9 @@ db.wards = require("../models/wards")(sequelize, Sequelize);
 db.userRoles = sequelize.define("userRoles");
 db.images = require("../models/images")(sequelize, Sequelize);
 db.models = require("../models/models")(sequelize, Sequelize);
+db.productColors = require("../models/productColors")(sequelize, Sequelize);
+db.accessories = require("../models/accessories")(sequelize, Sequelize);
+db.accessoryGroups = require("../models/accessoryGroups")(sequelize, Sequelize);
 
 //ket bang
 db.provinces.hasOne(db.users);
@@ -128,5 +131,9 @@ db.saleOrders.hasMany(db.saleOrderDetails);
 db.users.belongsTo(db.images);
 db.products.belongsTo(db.images);
 db.products.belongsTo(db.models);
+db.products.belongsTo(db.productColors);
+db.accessoryGroups.belongsTo(db.accessories);
+db.accessoryGroups.belongsTo(db.subgroups);
+db.accessoryGroups.belongsTo(db.quantityUnits);
 
 module.exports = db;

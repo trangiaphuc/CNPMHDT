@@ -1,13 +1,25 @@
 const db = require("../../models");
 const Product = db.products;
 const Images = db.images;
+const Model = db.models;
+const ProductColor = db.productColors;
+const Accessories = db.accessories;
+const AccessoryGroup = db.accessoriesGroups;
+const MainGroup = db.mainGroups;
+const Subgroup = db.subgroups;
+const Brand = db.brands;
+const QuantityUnit = db.quantityUnits;
+const Image = db.images;
 const fs = require("fs");
 const { Sequelize, Op } = require("sequelize");
 const { resolveNs } = require("dns/promises");
 const { resolveSoa } = require("dns");
+const { isBuffer } = require("util");
 
 exports.addNewProduct = (req, res) => {
     try {
+        isModel = req.body.isModel;
+
         if (req.file == undefined) {
             return res.send(`You must select a file.`);
         }
@@ -41,14 +53,31 @@ exports.addNewProduct = (req, res) => {
                             brandId: req.body.brandId,
                             quantityUnitId: req.body.quantityUnitId,
                             imageId: createdImage.id,
+                            modelId: (isModel = true ? null : req.body.modelId),
+                            productColorId: (issModel = true ? null : req.body.productColorId),
                         })
                         .then((createdroduct) => {
                             if (createdroduct) {
-                                res.status(201).send({
-                                    message: "Tạo mới sản phẩm thành công, mã sản phẩm: " +
-                                        createdroduct.id,
-                                    createdProduct: createdroduct,
-                                });
+                                if (isModel == true) {
+                                    Model.create({
+                                        modelName: req.body.modelName,
+                                        modelProductId: createdProduct.id,
+                                    }).then((createdModel) => {
+                                        if (createdModel != null) {
+                                            res.status(201).send({
+                                                message: "Tạo mới sản phẩm thành công, mã sản phẩm: " +
+                                                    createdroduct.id,
+                                                createdProduct: createdroduct,
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    res.status(201).send({
+                                        message: "Tạo mới sản phẩm thành công, mã sản phẩm: " +
+                                            createdroduct.id,
+                                        createdProduct: createdroduct,
+                                    });
+                                }
                             }
                         })
                         .catch((err) => {
@@ -66,7 +95,12 @@ exports.addNewProduct = (req, res) => {
 
 exports.getOneProduct = (req, res) => {
     Product.findOne({
-            where: { id: req.params.productId },
+            where: {
+                id: req.params.productId,
+                modelId: {
+                    [Op.is]: null,
+                },
+            },
         })
         .then((product) => {
             if (product) {
@@ -99,7 +133,13 @@ exports.getOneProduct = (req, res) => {
 
 exports.searchProductWithKeyword = (req, res) => {
     Product.findAll({
-            where: Sequelize.literal("MATCH (productName) AGAINST (:keyword)"),
+            where: [{
+                    modelId: {
+                        [Op.is]: null,
+                    },
+                },
+                Sequelize.literal("MATCH (productName) AGAINST (:keyword)"),
+            ],
             replacements: {
                 keyword: req.body.keyword,
             },
@@ -118,7 +158,7 @@ exports.searchProductWithKeyword = (req, res) => {
                                 Buffer.from(image).toString("base64");
                             product.setDataValue("productImage", base64ProductImage);
                             if (productList.indexOf(product) == productList.length - 1) {
-                                res.status(200).send({ resultl: productList });
+                                res.status(200).send({ result: productList });
                             }
                         }
                     })
@@ -139,11 +179,11 @@ exports.getProductWithParameters = (req, res) => {
     Product.findAll({
             where: {
                 [Op.and]: [{
-                        brandId: (iBrandId = -1 ?
+                        brandId: iBrandId == -1 ?
                             {
                                 [Op.gt]: 0,
                             } :
-                            iBrandId),
+                            iBrandId,
                     },
                     {
                         salePrice: minPrice > 0 ?
@@ -153,6 +193,11 @@ exports.getProductWithParameters = (req, res) => {
                             {
                                 [Op.gt]: 0,
                             },
+                    },
+                    {
+                        modelId: {
+                            [Op.is]: null,
+                        },
                     },
                 ],
             },
@@ -165,13 +210,12 @@ exports.getProductWithParameters = (req, res) => {
                     .then((productImage) => {
                         if (productImage) {
                             const image = fs.readFileSync(__basedir + productImage.imageUri);
-
                             var base64ProductImage =
                                 "data:image/png;base64," +
                                 Buffer.from(image).toString("base64");
                             product.setDataValue("productImage", base64ProductImage);
                             if (productList.indexOf(product) == productList.length - 1) {
-                                res.status(200).send({ resultl: productList });
+                                res.status(200).send({ result: productList });
                             }
                         }
                     })
@@ -179,6 +223,55 @@ exports.getProductWithParameters = (req, res) => {
                         res.status(500).send({ message: err.message });
                     });
             });
+        })
+        .catch((err) => {
+            res.status(500).send({ message: err.message });
+        });
+};
+
+exports.searchProductWithKeyword = (req, res) => {
+    let productId = req.body.productId;
+
+    Model.findOne({
+            where: {
+                productModelId: productId,
+            },
+        })
+        .then((foundModel) => {
+            Product.findAll({
+                    where: { modelId: foundModel.id },
+                    include: [
+                        { model: MainGroup },
+                        { model: Subgroup },
+                        { model: Brand },
+                        { model: QuantityUnit },
+                        { model: ProductColor },
+                        { model: Image },
+                    ],
+                })
+                .then((productList) => {
+                    var lstProductColor = [];
+                    productList.forEach((product) => {
+                        //lấy danh sách màu của model
+                        const productColor = product.colors;
+                        lstProductColor.push(productColor);
+
+                        const productImage = product.images;
+                        const image = fs.readFileSync(__basedir + productImage.imageUri);
+                        var base64ProductImage =
+                            "data:image/png;base64," + Buffer.from(image).toString("base64");
+                        product.setDataValue("productImage", base64ProductImage);
+                        if (productList.indexOf(product) == productList.length - 1) {
+                            res.status(200).send({
+                                productList: productList,
+                                productColorList: lstProductColor,
+                            });
+                        }
+                    });
+                })
+                .catch((err) => {
+                    res.status(500).send({ message: err.message });
+                });
         })
         .catch((err) => {
             res.status(500).send({ message: err.message });
