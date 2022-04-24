@@ -3,14 +3,14 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         /**
-             * Add seed commands here.
-             *
+                 * Add seed commands here.
+                 *
 
-             *   isBetaMember: false
-             * }], {});
-            */
+                 *   isBetaMember: false
+                 * }], {});
+                */
 
-        return queryInterface.bulkInsert("districts", [{
+        return queryInterface.bulkInsert("wards", [{
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 wardName: "Mỹ Bình",

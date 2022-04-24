@@ -14,7 +14,7 @@ module.exports = {
 
         return queryInterface.bulkInsert("payabletypes", [{
                 payableTypeName: "Thanh toán bằng tiền mặt",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -23,7 +23,7 @@ module.exports = {
             },
             {
                 payableTypeName: "Thanh toán qua thẻ",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",

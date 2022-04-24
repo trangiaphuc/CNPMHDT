@@ -14,7 +14,7 @@ module.exports = {
 
         return queryInterface.bulkInsert("inventorystatuses", [{
                 inventoryStatusName: "Mới",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -23,7 +23,7 @@ module.exports = {
             },
             {
                 inventoryStatusName: "99%",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -32,7 +32,7 @@ module.exports = {
             },
             {
                 inventoryStatusName: "90%",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",

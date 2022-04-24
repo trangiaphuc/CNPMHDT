@@ -18,8 +18,7 @@ const { isBuffer } = require("util");
 
 exports.addNewProduct = (req, res) => {
     try {
-        isModel = req.body.isModel;
-
+        let isModel = Boolean(req.body.isModel);
         if (req.file == undefined) {
             return res.send(`You must select a file.`);
         }
@@ -53,29 +52,30 @@ exports.addNewProduct = (req, res) => {
                             brandId: req.body.brandId,
                             quantityUnitId: req.body.quantityUnitId,
                             imageId: createdImage.id,
-                            modelId: (isModel = true ? null : req.body.modelId),
-                            productColorId: (issModel = true ? null : req.body.productColorId),
+                            modelId: isModel == true ? null : req.body.modelId,
+                            productColorId: isModel == true ? null : req.body.productColorId,
                         })
-                        .then((createdroduct) => {
-                            if (createdroduct) {
-                                if (isModel == true) {
+                        .then((createdproduct) => {
+                            if (createdproduct) {
+                                if (isModel === true) {
                                     Model.create({
                                         modelName: req.body.modelName,
-                                        modelProductId: createdProduct.id,
+                                        modelProductId: createdproduct.id,
                                     }).then((createdModel) => {
-                                        if (createdModel != null) {
+                                        if (createdModel) {
                                             res.status(201).send({
                                                 message: "Tạo mới sản phẩm thành công, mã sản phẩm: " +
-                                                    createdroduct.id,
-                                                createdProduct: createdroduct,
+                                                    createdproduct.id,
+                                                createdProduct: createdproduct,
+                                                createdModel: createdModel,
                                             });
                                         }
                                     });
                                 } else {
                                     res.status(201).send({
                                         message: "Tạo mới sản phẩm thành công, mã sản phẩm: " +
-                                            createdroduct.id,
-                                        createdProduct: createdroduct,
+                                            createdproduct.id,
+                                        createdProduct: createdproduct,
                                     });
                                 }
                             }
@@ -101,28 +101,31 @@ exports.getOneProduct = (req, res) => {
                     [Op.is]: null,
                 },
             },
+            include: [{ model: Image }],
         })
         .then((product) => {
             if (product) {
-                Images.findOne({
-                        where: { id: product.imageId },
-                    })
-                    .then((productImage) => {
-                        if (productImage) {
-                            const image = fs.readFileSync(__basedir + productImage.imageUri);
+                // Images.findOne({
+                //         where: { id: product.imageId },
+                //     })
+                //     .then((productImage) => {
+                //         if (productImage) {
+                const productImage = product.image;
+                if (productImage) {
+                    const image = fs.readFileSync(__basedir + productImage.imageUri);
 
-                            var base64ProductImage =
-                                "data:image/png;base64," +
-                                Buffer.from(image).toString("base64");
-                            product.setDataValue("productImage", base64ProductImage);
-                            res.status(200).send({
-                                product: product,
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        res.status(500).send({ message: err.message });
+                    var base64ProductImage =
+                        "data:image/png;base64," + Buffer.from(image).toString("base64");
+                    product.setDataValue("productImage", base64ProductImage);
+                    res.status(200).send({
+                        product: product,
                     });
+                }
+                //     }
+                // })
+                // .catch((err) => {
+                //     res.status(500).send({ message: err.message });
+                // });
                 // res.status(200).send({product: product})
             }
         })
@@ -143,28 +146,31 @@ exports.searchProductWithKeyword = (req, res) => {
             replacements: {
                 keyword: req.body.keyword,
             },
+            include: [{ model: Image }],
         })
         .then((productList) => {
             productList.forEach((product) => {
-                Images.findOne({
-                        where: { id: product.imageId },
-                    })
-                    .then((productImage) => {
-                        if (productImage) {
-                            const image = fs.readFileSync(__basedir + productImage.imageUri);
+                // Images.findOne({
+                //         where: { id: product.imageId },
+                //     })
+                //     .then((productImage) => {
+                //         if (productImage) {
+                const productImage = product.image;
+                if (productImage) {
+                    const image = fs.readFileSync(__basedir + productImage.imageUri);
 
-                            var base64ProductImage =
-                                "data:image/png;base64," +
-                                Buffer.from(image).toString("base64");
-                            product.setDataValue("productImage", base64ProductImage);
-                            if (productList.indexOf(product) == productList.length - 1) {
-                                res.status(200).send({ result: productList });
-                            }
-                        }
-                    })
-                    .catch((err) => {
-                        res.status(500).send({ message: err.message });
-                    });
+                    var base64ProductImage =
+                        "data:image/png;base64," + Buffer.from(image).toString("base64");
+                    product.setDataValue("productImage", base64ProductImage);
+                    if (productList.indexOf(product) == productList.length - 1) {
+                        res.status(200).send({ result: productList });
+                    }
+                }
+                //     }
+                // })
+                // .catch((err) => {
+                //     res.status(500).send({ message: err.message });
+                // });
             });
         })
         .catch((err) => {
@@ -201,27 +207,33 @@ exports.getProductWithParameters = (req, res) => {
                     },
                 ],
             },
+            include: [{
+                model: Image,
+            }, ],
         })
         .then((productList) => {
             productList.forEach((product) => {
-                Images.findOne({
-                        where: { id: product.imageId },
-                    })
-                    .then((productImage) => {
-                        if (productImage) {
-                            const image = fs.readFileSync(__basedir + productImage.imageUri);
-                            var base64ProductImage =
-                                "data:image/png;base64," +
-                                Buffer.from(image).toString("base64");
-                            product.setDataValue("productImage", base64ProductImage);
-                            if (productList.indexOf(product) == productList.length - 1) {
-                                res.status(200).send({ result: productList });
-                            }
+                if (productImage) {
+                    const productImage = product.image;
+                    // Images.findOne({
+                    //         where: { id: product.imageId },
+                    //     })
+                    //     .then((productImage) => {
+                    console.log("hu yeah");
+                    if (productImage) {
+                        const image = fs.readFileSync(__basedir + productImage.imageUri);
+                        var base64ProductImage =
+                            "data:image/png;base64," + Buffer.from(image).toString("base64");
+                        product.setDataValue("productImage", base64ProductImage);
+                        if (productList.indexOf(product) == productList.length - 1) {
+                            res.status(200).send({ result: productList });
                         }
-                    })
-                    .catch((err) => {
-                        res.status(500).send({ message: err.message });
-                    });
+                    }
+                }
+                // })
+                // .catch((err) => {
+                //     res.status(500).send({ message: err.message });
+                // });
             });
         })
         .catch((err) => {
@@ -229,54 +241,54 @@ exports.getProductWithParameters = (req, res) => {
         });
 };
 
-exports.searchProductWithKeyword = (req, res) => {
-    let productId = req.body.productId;
+// exports.searchProductWithKeyword = (req, res) => {
+//     let productId = req.body.productId;
 
-    Model.findOne({
-            where: {
-                productModelId: productId,
-            },
-        })
-        .then((foundModel) => {
-            Product.findAll({
-                    where: { modelId: foundModel.id },
-                    include: [
-                        { model: MainGroup },
-                        { model: Subgroup },
-                        { model: Brand },
-                        { model: QuantityUnit },
-                        { model: ProductColor },
-                        { model: Image },
-                    ],
-                })
-                .then((productList) => {
-                    var lstProductColor = [];
-                    productList.forEach((product) => {
-                        //lấy danh sách màu của model
-                        const productColor = product.colors;
-                        lstProductColor.push(productColor);
+//     Model.findOne({
+//             where: {
+//                 productModelId: productId,
+//             },
+//         })
+//         .then((foundModel) => {
+//             Product.findAll({
+//                     where: { modelId: foundModel.id },
+//                     include: [
+//                         { model: MainGroup },
+//                         { model: Subgroup },
+//                         { model: Brand },
+//                         { model: QuantityUnit },
+//                         { model: ProductColor },
+//                         { model: Image },
+//                     ],
+//                 })
+//                 .then((productList) => {
+//                     var lstProductColor = [];
+//                     productList.forEach((product) => {
+//                         //lấy danh sách màu của model
+//                         const productColor = product.colors;
+//                         lstProductColor.push(productColor);
 
-                        const productImage = product.images;
-                        const image = fs.readFileSync(__basedir + productImage.imageUri);
-                        var base64ProductImage =
-                            "data:image/png;base64," + Buffer.from(image).toString("base64");
-                        product.setDataValue("productImage", base64ProductImage);
-                        if (productList.indexOf(product) == productList.length - 1) {
-                            res.status(200).send({
-                                productList: productList,
-                                productColorList: lstProductColor,
-                            });
-                        }
-                    });
-                })
-                .catch((err) => {
-                    res.status(500).send({ message: err.message });
-                });
-        })
-        .catch((err) => {
-            res.status(500).send({ message: err.message });
-        });
-};
+//                         const productImage = product.images;
+//                         const image = fs.readFileSync(__basedir + productImage.imageUri);
+//                         var base64ProductImage =
+//                             "data:image/png;base64," + Buffer.from(image).toString("base64");
+//                         product.setDataValue("productImage", base64ProductImage);
+//                         if (productList.indexOf(product) == productList.length - 1) {
+//                             res.status(200).send({
+//                                 productList: productList,
+//                                 productColorList: lstProductColor,
+//                             });
+//                         }
+//                     });
+//                 })
+//                 .catch((err) => {
+//                     res.status(500).send({ message: err.message });
+//                 });
+//         })
+//         .catch((err) => {
+//             res.status(500).send({ message: err.message });
+//         });
+// };
 
 exports.testAPI = (req, res) => {
     res.send({ message: "Hello" });

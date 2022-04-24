@@ -11,6 +11,15 @@ module.exports = {
             districtName: {
                 type: Sequelize.STRING,
             },
+            districtCode: {
+                type: Sequelize.STRING,
+            },
+            provinceCode: {
+                type: Sequelize.STRING,
+            },
+            path: {
+                type: Sequelize.STRING,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

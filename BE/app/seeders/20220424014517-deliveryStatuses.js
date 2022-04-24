@@ -13,8 +13,8 @@ module.exports = {
          */
 
         return queryInterface.bulkInsert("deliverystatuses", [{
-                deliveryStatuseName: "Chờ duyệt",
-                isDeleted: false,
+                deliveryStatusName: "Chờ duyệt",
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -22,8 +22,8 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                deliveryStatuseName: "Đang giao hàng",
-                isDeleted: false,
+                deliveryStatusName: "Đang giao hàng",
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -31,8 +31,8 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                deliveryStatuseName: "Đã giao hàng",
-                isDeleted: false,
+                deliveryStatusName: "Đã giao hàng",
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -40,8 +40,8 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                deliveryStatuseName: "Giao hàng thành công",
-                isDeleted: false,
+                deliveryStatusName: "Giao hàng thành công",
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -49,8 +49,8 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                deliveryStatuseName: "Đã hủy",
-                isDeleted: false,
+                deliveryStatusName: "Đã hủy",
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",

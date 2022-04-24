@@ -382,10 +382,9 @@ module.exports = {
             },
             {
                 provinceName: "Bắc Kạn",
-                slug: "bac-kan",
-                type: "tinh",
-                name_with_type: "Tỉnh Bắc Kạn",
                 provinceCode: "06",
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         ]);
     },

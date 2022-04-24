@@ -12,21 +12,21 @@ module.exports = {
          * }], {});
          */
 
-        return queryInterface.bulkInsert("userstatues", [{
+        return queryInterface.bulkInsert("userstatuses", [{
                 userstatusName: "Đang hoạt động",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
-                deleteUser: "",
-                updateUser: "administrator",
+                userDelete: "",
+                userUpdate: "administrator",
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 userstatusName: "Dừng hoạt động",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
-                deleteUser: "",
-                updateUser: "administrator",
+                userDelete: "",
+                userUpdate: "administrator",
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },

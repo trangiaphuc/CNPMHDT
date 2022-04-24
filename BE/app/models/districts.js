@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
     }
     districts.init({
         districtName: DataTypes.STRING,
+        districtCode: DataTypes.STRING,
+        provinceCode: DataTypes.STRING,
+        path: DataTypes.STRING,
     }, {
         sequelize,
         modelName: "districts",

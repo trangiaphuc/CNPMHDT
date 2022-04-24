@@ -12,10 +12,10 @@ module.exports = {
          * }], {});
          */
 
-        return queryInterface.bulkInsert("deliverystatuses", [{
-                deliveryTypes: "Giao hàng tận nơi",
+        return queryInterface.bulkInsert("deliverytypes", [{
+                deliveryType: "Giao hàng tận nơi",
                 shippingFee: 15000,
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",
@@ -23,9 +23,9 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
-                deliveryTypes: "Nhận tại cửa hàng",
+                deliveryType: "Nhận tại cửa hàng",
                 shippingFee: 0,
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 userDelete: "",
                 userUpdate: "administrator",

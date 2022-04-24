@@ -14,7 +14,7 @@ module.exports = {
 
         return queryInterface.bulkInsert("roles", [{
                 rolename: "administrator",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 deleteUser: "",
                 updateUser: "administrator",
@@ -24,7 +24,7 @@ module.exports = {
 
             {
                 rolename: "shipper",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 deleteUser: "",
                 updateUser: "administrator",
@@ -34,7 +34,7 @@ module.exports = {
 
             {
                 rolename: "staff",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 deleteUser: "",
                 updateUser: "administrator",
@@ -44,7 +44,7 @@ module.exports = {
 
             {
                 rolename: "user",
-                isDeleted: false,
+                isDelete: false,
                 userCreate: "administrator",
                 deleteUser: "",
                 updateUser: "administrator",
