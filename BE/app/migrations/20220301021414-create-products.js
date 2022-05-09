@@ -20,6 +20,7 @@ module.exports = {
             VAT: {
                 type: Sequelize.FLOAT,
             },
+            RAM: { type: Sequelize.STRING },
             deliveryVehicle: {
                 type: Sequelize.INTEGER,
             },

@@ -87,6 +87,8 @@ db.models = require("../models/models")(sequelize, Sequelize);
 db.productColors = require("../models/productColors")(sequelize, Sequelize);
 db.accessories = require("../models/accessories")(sequelize, Sequelize);
 db.accessoryGroups = require("../models/accessoryGroups")(sequelize, Sequelize);
+db.productInfors = require("../models/productinfo")(sequelize, Sequelize);
+db.productContents = require("../models/productcontent")(sequelize, Sequelize);
 
 //ket bang
 db.provinces.hasOne(db.users);
@@ -135,5 +137,7 @@ db.products.belongsTo(db.productColors);
 db.accessoryGroups.belongsTo(db.accessories);
 db.accessoryGroups.belongsTo(db.subgroups);
 db.accessoryGroups.belongsTo(db.quantityUnits);
+db.productInfors.belongsTo(db.products);
+db.productContents.belongsTo(db.products);
 
 module.exports = db;

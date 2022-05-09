@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     models.init({
         modelName: DataTypes.STRING,
         modelProductId: DataTypes.INTEGER,
+        isDelete: DataTypes.BOOLEAN,
     }, {
         sequelize,
         modelName: "models",

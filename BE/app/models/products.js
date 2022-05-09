@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
             isGiftVoucher: {
                 type: DataTypes.BOOLEAN,
             },
+            RAM: { type: DataTypes.STRING },
             isCanReturnOutput: {
                 type: DataTypes.BOOLEAN,
             },

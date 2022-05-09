@@ -150,11 +150,6 @@ exports.searchProductWithKeyword = (req, res) => {
         })
         .then((productList) => {
             productList.forEach((product) => {
-                // Images.findOne({
-                //         where: { id: product.imageId },
-                //     })
-                //     .then((productImage) => {
-                //         if (productImage) {
                 const productImage = product.image;
                 if (productImage) {
                     const image = fs.readFileSync(__basedir + productImage.imageUri);
@@ -166,11 +161,6 @@ exports.searchProductWithKeyword = (req, res) => {
                         res.status(200).send({ result: productList });
                     }
                 }
-                //     }
-                // })
-                // .catch((err) => {
-                //     res.status(500).send({ message: err.message });
-                // });
             });
         })
         .catch((err) => {

@@ -4,7 +4,7 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         return queryInterface.bulkInsert("maingroups", [{
                 maingroupName: "Điện thoại",
-                maingroupIcon: "/BE/app/resources/images/maingroupIcons/smartphone.png",
+                maingroupIcon: "/resources/images/maingroupIcons/smartphone.png",
                 isDelete: false,
                 userCreate: "admin",
                 userUpdate: "admin",
@@ -14,7 +14,7 @@ module.exports = {
             },
             {
                 maingroupName: "Tablet",
-                maingroupIcon: "BE/app/resources/images/maingroupIcons/tablet.png",
+                maingroupIcon: "/resources/images/maingroupIcons/tablet.png",
                 isDelete: false,
                 userCreate: "admin",
                 userUpdate: "admin",
@@ -24,7 +24,7 @@ module.exports = {
             },
             {
                 maingroupName: "Loa- tai nghe",
-                maingroupIcon: "BE/app/resources/images/maingroupIcons/headphones.png",
+                maingroupIcon: "/resources/images/maingroupIcons/headphones.png",
                 isDelete: false,
                 userCreate: "admin",
                 userUpdate: "admin",
@@ -34,7 +34,7 @@ module.exports = {
             },
             {
                 maingroupName: "Pin- sạc dự phòng",
-                maingroupIcon: "BE/app/resources/images/maingroupIcons/battery-charge.png",
+                maingroupIcon: "/resources/images/maingroupIcons/battery-charge.png",
                 isDelete: false,
                 userCreate: "admin",
                 userUpdate: "admin",

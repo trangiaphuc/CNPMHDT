@@ -33,5 +33,7 @@ db.sequelize
 require("./routes/general.routes/auth.routes")(app);
 require("./routes/admin.routes/user.routes")(app);
 require("./routes/admin.routes/product.routes")(app);
+require("./routes/general.routes/mainGroup.routes")(app);
+require("./routes/user.routes/product.routes")(app);
 
 module.exports = app;

@@ -18,6 +18,9 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DATE,
             },
+            isDelete: {
+                type: Sequelize.BOOLEAN,
+            },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
