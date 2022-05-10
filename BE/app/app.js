@@ -5,7 +5,8 @@ const db = require("./models");
 // const logger = require('./app/winston/winston')
 
 var corsOptions = {
-    origin: "http://localhost:9000",
+    origin: "http://localhost:3000",
+    credentials: true,
 };
 
 global.__basedir = __dirname;
@@ -35,5 +36,7 @@ require("./routes/admin.routes/user.routes")(app);
 require("./routes/admin.routes/product.routes")(app);
 require("./routes/general.routes/mainGroup.routes")(app);
 require("./routes/user.routes/product.routes")(app);
+require("./routes/general.routes/brand.routes")(app);
+require("./routes/general.routes/place.routes")(app);
 
 module.exports = app;
