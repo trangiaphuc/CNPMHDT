@@ -22,6 +22,15 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
+                deliveryStatusName: "Đã duyệt",
+                isDelete: false,
+                userCreate: "administrator",
+                userDelete: "",
+                userUpdate: "administrator",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
                 deliveryStatusName: "Đang giao hàng",
                 isDelete: false,
                 userCreate: "administrator",

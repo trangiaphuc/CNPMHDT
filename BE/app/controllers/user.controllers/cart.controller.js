@@ -12,12 +12,13 @@ const fs = require("fs");
 exports.getCartDetails = (req, res) => {
     Cart.findAll({
         where: { userId: req.body.userId, isBuy: false, isDelete: false },
-        include: [{
-            model: CartDetail,
-            include: [{ model: Product }],
-        }, ],
     }).then((foundCart) => {
-        res.status(200).send({ result: foundCart });
+        CartDetail.findAll({
+            where: { cartId: foundCart.id, include: [{ model: Product }] },
+        }).then((cartDetailList) => {
+            foundCart.setDataValue("cartDetailList", cartDetailList);
+            res.status(200).send({ result: foundCart });
+        });
     });
 };
 
@@ -51,7 +52,6 @@ exports.editCartDetails = (req, res) => {
             foundCartDetails
                 .update({
                     quantity: req.body.quantity,
-                    isBuy: req.body.isBuy,
                     isDelete: req.body.isDelete,
                 })
                 .then(() => {

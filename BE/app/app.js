@@ -38,5 +38,10 @@ require("./routes/general.routes/mainGroup.routes")(app);
 require("./routes/user.routes/product.routes")(app);
 require("./routes/general.routes/brand.routes")(app);
 require("./routes/general.routes/place.routes")(app);
+require("./routes/admin.routes/saleOrder.routes")(app);
+require("./routes/general.routes/deliveryStatus.routes")(app);
+require("./routes/general.routes/deliveryType.routes")(app);
+require("./routes/general.routes/mainGroup.routes")(app);
+require("./routes/general.routes/payableType.routes")(app);
 
 module.exports = app;

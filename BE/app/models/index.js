@@ -132,6 +132,7 @@ db.saleOrders.belongsTo(db.districts);
 db.saleOrders.belongsTo(db.wards);
 db.saleOrders.belongsTo(db.payableTypes);
 db.saleOrders.hasMany(db.saleOrderDetails);
+db.saleOrders.belongsTo(db.deliveryTypes);
 db.users.belongsTo(db.images);
 db.products.belongsTo(db.images);
 db.products.belongsTo(db.models);
@@ -144,5 +145,6 @@ db.productContents.belongsTo(db.products);
 db.carts.belongsTo(db.users);
 db.cartDetails.belongsTo(db.carts);
 db.cartDetails.belongsTo(db.products);
+db.saleOrderDetails.belongsTo(db.products);
 
 module.exports = db;
