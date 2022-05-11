@@ -1,5 +1,5 @@
 const { verifySignUp } = require("../../midlleware");
-const controller = require("../../controllers/user.controllers/product.controller");
+const controller = require("../../controllers/user.controllers/cart.controller");
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.header(
@@ -9,27 +9,27 @@ module.exports = function(app) {
         next();
     });
 
-    app.get(
-        "/user/get-all-product-model", [
+    app.post(
+        "/user/add-to-cart", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getProductModel
+        controller.addToCart
     );
 
     app.post(
-        "/user/get-all-product-by-model", [
+        "/user/get-cart-by-user", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getProductWithModel
+        controller.getCartDetails
     );
 
-    app.get(
-        "/user/get-random-product", [
+    app.post(
+        "/user/edit-cart", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getRandomProductWithModel
+        controller.editCartDetails
     );
 };

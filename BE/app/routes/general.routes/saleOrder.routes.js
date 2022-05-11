@@ -1,5 +1,5 @@
 const { verifySignUp } = require("../../midlleware");
-const controller = require("../../controllers/user.controllers/product.controller");
+const controller = require("../../controllers/general.controllers/saleorder.controller");
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.header(
@@ -9,27 +9,27 @@ module.exports = function(app) {
         next();
     });
 
-    app.get(
-        "/user/get-all-product-model", [
+    app.post(
+        "/general/get-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getProductModel
+        controller.getSalesOrderByUserId
     );
 
     app.post(
-        "/user/get-all-product-by-model", [
+        "/general/edit-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getProductWithModel
+        controller.editSaleOrder
     );
 
-    app.get(
-        "/user/get-random-product", [
+    app.post(
+        "/general/add-new-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getRandomProductWithModel
+        controller.addNewSaleOrder
     );
 };
