@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -6,24 +6,6 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Product, ProductCategories } from "../data";
 
 const ProductByCat = () => {
-    // const getProducts = async () => {
-    //     try {
-    //         const res = await axios.get(
-    //             "http://localhost:9000/general/get-maingroups-list"
-    //         );
-    //         console.log(res.data.result)
-    //         a=res.data.result;
-    //         return res;
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-    // async function test (){
-    //     const res = await axios.get("http://localhost:9000/general/get-maingroups-list");
-    //     console.log(res.data.result);
-    //     return res;
-    // }
-    // test()
     return (
         <Container>
             <Content>

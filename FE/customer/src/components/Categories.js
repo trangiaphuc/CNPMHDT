@@ -1,17 +1,40 @@
-import React from "react";
-import styled from "styled-components";
-import { mainProduct, subProduct, subProduct2 } from "../data";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
+import styled from "styled-components";
+import { subProduct, subProduct2 } from "../data";
 
 const Categories = () => {
+    const [mainGroup, setMainGroup] = useState([]);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-maingroups-list"
+                );
+                setMainGroup(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
     return (
         <Container>
             <ListMain>
-                {mainProduct.map((itemMain) => (
+                {mainGroup.map((itemMain) => (
                     <MainItem key={itemMain.id}>
                         <ItemTitle>
-                            <TextMainProduct>{itemMain.name}</TextMainProduct>
+                            <ImageMainGroupContainer>
+                                <ImageMainGroup
+                                    src={itemMain.mainGroupImage}
+                                ></ImageMainGroup>
+                            </ImageMainGroupContainer>
+                            <TextMainProduct>
+                                {itemMain.maingroupName}
+                            </TextMainProduct>
                         </ItemTitle>
+
                         <ListSub>
                             <LeftType>
                                 <TitleType>
@@ -70,6 +93,7 @@ const ListMain = styled.div`
     padding: 0;
     display: flex;
     align-items: center;
+    height: 31px;
 `;
 const ListSub = styled.div`
     position: absolute;
@@ -180,9 +204,23 @@ const LeftType = styled.div`
 `;
 const TitleType = styled.div``;
 const RightType = styled.div``;
-const ItemTitle = styled.div``;
-const SubItemPrice = styled.div`
-    width: 120px;
-    border-bottom: 1px solid blue;
-    margin-right: 10px;
+
+const ImageMainGroupContainer = styled.div`
+    height: 31px;
+    width: 22px;
+`;
+const ItemTitle = styled.div`
+    display: flex;
+    width: fit-content;
+    margin: auto;
+`;
+const ImageMainGroup = styled.img`
+    margin-top: 3px;
+    height: 70%;
+    object-fit: cover;
+`;
+const LinkMainGroup = styled.a`
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
 `;
