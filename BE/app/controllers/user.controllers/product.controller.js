@@ -157,7 +157,7 @@ exports.getProductWithModel = (req, res) => {
 
                     res.status(200).send({
                         productList: productsList,
-                        // productColorList: productColorList,
+                        productColorList: productColorList,
                     });
                 }
             });
