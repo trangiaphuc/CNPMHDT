@@ -30,7 +30,7 @@ exports.getProductModel = (req, res) => {
                     }).then((product) => {
                         const productImage = product.image;
                         const brand = product.brand;
-                        const quantityUnit = product.quantity;
+                        const quantityUnit = product.quantityUnit;
 
                         if (productImage) {
                             const image = fs.readFileSync(__basedir + productImage.imageUri);
@@ -42,11 +42,11 @@ exports.getProductModel = (req, res) => {
                             product.setDataValue("productImage", base64ProductImage);
 
                             const brandName = brand.brandName;
-                            const quantityUnitName = quantityUnit.quantityUnitName;
+                            const productQuantityUnitName = quantityUnit.quantityUnitName;
 
                             model.setDataValue("productModel", product);
                             model.setDataValue("productBrand", brandName);
-                            model.setDataValue("productQuantity", quantityUnitName);
+                            model.setDataValue("productQuantity", productQuantityUnitName);
 
                             if (modelList.indexOf(model) == modelList.length - 1) {
                                 res.status(200).send({ result: modelList });
@@ -69,56 +69,96 @@ exports.getProductWithModel = (req, res) => {
             { model: Brand },
             { model: QuantityUnit },
             { model: Image },
-            {
-                model: CurrentInstock,
-                where: { storeId: req.body.storeId },
-            },
         ],
     }).then((productsList) => {
         if (productsList.length) {
             const productColorList = [];
-            productsList.forEach((product) => {
+            productsList.forEach(async(product) => {
                 const productImage = product.image;
                 const brand = product.brand;
                 const productColor = product.productColor;
                 const quantityUnit = product.quantityUnit;
-                const currentInstocks = product.currentInstocks;
+                // const currentInstocks = product.currentInstocks;
+                const productId = product.id;
+
+                const productCurrentInstocks = await CurrentInstock.findOne({
+                    where: { productId: product.id, storeId: req.body.storeId },
+                });
+
+                const productInfo = await ProductInfo.findAll({
+                    where: { productId: req.body.modelId },
+                });
+                const productContentList = await ProductContent.findAll({
+                    where: { productId: req.body.modelId },
+                });
+
+                if (productContentList.length > 0) {
+                    productContentList.forEach((productContent) => {
+                        const isImage = productContent.isImage;
+                        if (isImage == true) {
+                            const image = fs.readFileSync(__basedir + productContent.content);
+                            var base64ProductImage =
+                                "data:image/png;base64," +
+                                Buffer.from(image).toString("base64");
+                            productContent.content = base64ProductImage;
+                        }
+                    });
+                }
+
+                // const currentInstockStore = await productCurrentInstocks.storeId;
+                // const currentInstockQuantity = productCurrentInstocks.quantity;
+
+                // console.log({ bePhucDeThuong: productCurrentInstocks.dataValues });
 
                 if (productImage) {
                     const image = fs.readFileSync(__basedir + productImage.imageUri);
 
                     var base64ProductImage =
                         "data:image/png;base64," + Buffer.from(image).toString("base64");
+                    productColor.setDataValue("productId", productId);
                     productColorList.push(productColor);
+                }
 
-                    const brandName = brand.brandName;
-                    const quantityUnitName = quantityUnit.quantityUnitName;
-                    const colorName = productColor.colorName;
-                    const colorCode = productColor.colorCode;
-                    const currentInstockStoreId = currentInstocks.storeId;
-                    const currentInstockQuantity = currentInstocks.quantity;
+                const brandName = brand.brandName;
+                const quantityUnitName = quantityUnit.quantityUnitName;
+                const colorName = productColor.colorName;
+                const colorCode = productColor.colorCode;
 
-                    product.setDataValue("productBrand", brandName);
-                    product.setDataValue("productQuantity", quantityUnitName);
-                    product.setDataValue("productColorName", colorName);
-                    product.setDataValue("productColorCode", colorCode);
-                    product.setDataValue("productImage", base64ProductImage);
-                    product.setDataValue("currentInstockStoreId", currentInstockStoreId);
-                    product.setDataValue(
-                        "currentInstockQuantity",
-                        currentInstockQuantity
-                    );
+                // console.log(
+                //     "banPhucLog " +
+                //     // currentInstockStoreId,
+                //     currentInstockQuantity
+                // );
 
-                    if (productsList.indexOf(product) == productsList.length - 1) {
-                        // const result = {};
-                        // result.setDataValue("productList", productsList);
-                        // result.setDataValue("productColorList", productColorList);
+                product.setDataValue("productBrand", brandName);
+                product.setDataValue("productQuantity", quantityUnitName);
+                product.setDataValue("productColorName", colorName);
+                product.setDataValue("productColorCode", colorCode);
+                product.setDataValue("productImage", base64ProductImage);
+                product.setDataValue(
+                    "productCurrentInstockStoreId",
+                    productCurrentInstocks
+                );
+                // product.setDataValue(
+                //     "productCurrentInstockStoreId",
+                //     currentInstockStoreId
+                // );
+                // product.setDataValue(
+                //     "productCurrentInstockQuantity",
+                //     currentInstockQuantity
+                // );
+                product.setDataValue("productInfomation", productInfo);
+                product.setDataValue("productContent", productContentList);
 
-                        res.status(200).send({
-                            productList: productsList,
-                            productColorList: productColorList,
-                        });
-                    }
+                if (productsList.indexOf(product) == productsList.length - 1) {
+                    // const result = {};
+                    // result.setDataValue("productList", productsList);
+                    // result.setDataValue("productColorList", productColorList);
+
+                    res.status(200).send({
+                        productList: productsList,
+                        // productColorList: productColorList,
+                    });
                 }
             });
         }
