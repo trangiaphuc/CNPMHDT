@@ -43,5 +43,6 @@ require("./routes/general.routes/deliveryStatus.routes")(app);
 require("./routes/general.routes/deliveryType.routes")(app);
 require("./routes/general.routes/mainGroup.routes")(app);
 require("./routes/general.routes/payableType.routes")(app);
+require("./routes/general.routes/store.routes")(app);
 
 module.exports = app;

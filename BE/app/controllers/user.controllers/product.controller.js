@@ -217,3 +217,119 @@ exports.getRandomProductWithModel = (req, res) => {
         }
     });
 };
+
+exports.searchProductWithKeyword = (req, res) => {
+    Product.findAll({
+            where: [{
+                    modelId: {
+                        [Op.is]: null,
+                    },
+                    isDelete: false,
+                    modelId: null,
+                },
+                Sequelize.literal("MATCH (productName) AGAINST (:keyword)"),
+            ],
+            replacements: {
+                keyword: req.body.keyword,
+            },
+            include: [{ model: Image }],
+        })
+        .then((productList) => {
+            productList.forEach((product) => {
+                Model.findOne({ where: { modelProductId: product.id } }).then(
+                    (foundModel) => {
+                        const productImage = product.image;
+                        const productModelId = foundModel.id;
+                        if (productImage) {
+                            const image = fs.readFileSync(__basedir + productImage.imageUri);
+
+                            var base64ProductImage =
+                                "data:image/png;base64," +
+                                Buffer.from(image).toString("base64");
+                            product.setDataValue("productImage", base64ProductImage);
+                            product.setDataValue("productModelId", productModelId);
+                            if (productList.indexOf(product) == productList.length - 1) {
+                                res.status(200).send({ result: productList });
+                            }
+                        }
+                    }
+                );
+            });
+        })
+        .catch((err) => {
+            res.status(500).send({ result: err.message });
+        });
+};
+
+exports.searchSameproductWithParams = (req, res) => {
+    let iBrandId = req.body.brandId;
+    let minPrice = req.body.minPrice;
+    let iMaingroupId = req.body.maingroupId;
+    Product.findAll({
+            where: {
+                [Op.and]: [{
+                        brandId: iBrandId == -1 ?
+                            {
+                                [Op.gt]: 0,
+                            } :
+                            iBrandId,
+                    },
+                    {
+                        maingroupId: iMaingroupId == -1 ?
+                            {
+                                [Op.gt]: 0,
+                            } :
+                            iMaingroupId,
+                    },
+                    {
+                        salePrice: minPrice > 0 ?
+                            {
+                                [Op.lte]: minPrice,
+                            } :
+                            {
+                                [Op.gt]: 0,
+                            },
+                    },
+                    {
+                        modelId: {
+                            [Op.is]: null,
+                        },
+                        isDelete: {
+                            [Op.is]: false,
+                        },
+                    },
+                ],
+            },
+            include: [{
+                model: Image,
+            }, ],
+        })
+        .then((productList) => {
+            productList.forEach((product) => {
+                if (productImage) {
+                    Model.findOne({ where: { modelProductId: product.id } }).then(
+                        (model) => {
+                            const productModelId = model.id;
+                            const productImage = product.image;
+                            if (productImage) {
+                                const image = fs.readFileSync(
+                                    __basedir + productImage.imageUri
+                                );
+                                var base64ProductImage =
+                                    "data:image/png;base64," +
+                                    Buffer.from(image).toString("base64");
+                                product.setDataValue("productImage", base64ProductImage);
+                                product.setDataValue("productModelId", productModelId);
+                                if (productList.indexOf(product) == productList.length - 1) {
+                                    res.status(200).send({ result: productList });
+                                }
+                            }
+                        }
+                    );
+                }
+            });
+        })
+        .catch((err) => {
+            res.status(500).send({ message: err.message });
+        });
+};

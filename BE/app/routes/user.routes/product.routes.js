@@ -25,6 +25,22 @@ module.exports = function(app) {
         controller.getProductWithModel
     );
 
+    app.post(
+        "/user/search-product-model", [
+            // verifySignUp.checkDuplicateUsernameOrEmail,
+            // verifySignUp.checkRolesExisted
+        ],
+        controller.searchProductWithKeyword
+    );
+
+    app.post(
+        "/user/get-product-model-with-params", [
+            // verifySignUp.checkDuplicateUsernameOrEmail,
+            // verifySignUp.checkRolesExisted
+        ],
+        controller.searchSameproductWithParams
+    );
+
     app.get(
         "/user/get-random-product", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
