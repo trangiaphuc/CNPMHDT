@@ -14,6 +14,6 @@ module.exports = function(app) {
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getAllPayableType
+        controller.getAllStores
     );
 };

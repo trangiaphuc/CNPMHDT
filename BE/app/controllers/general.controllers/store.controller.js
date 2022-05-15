@@ -17,17 +17,16 @@ exports.getAllStores = (req, res) => {
         })
         .then((foundStore) => {
             if (foundStore) {
-                const storeProvinces = foundStore.province;
-                const storeDistricts = foundStore.district;
-                const storeWards = foundStore.ward;
-                const storeAddress =
-                    storeWards.wardName +
-                    " " +
-                    storeDistricts.districtName +
-                    " " +
-                    storeProvinces.provinceName;
-                foundStore.setDataValue("storeAddress", storeAddress);
-                res.status(200).send({ result: foundBrands });
+                // const storeProvinces = foundStore.province;
+                // const storeDistricts = foundStore.district;
+                // const storeWards = foundStore.ward;
+                // const wardNameN = storeWards.wardName;
+                // // console.log({ sound: storeWards });
+                // const provinceNameN = storeProvinces.provinceName;
+                // const districtNameN = storeDistricts.districtName;
+                // const storeAddress = wardNameN + " " + districtNameN + " " + provinceNameN;
+                // foundStore.setDataValue("storeAddress", storeAddress);
+                res.status(200).send({ result: foundStore });
             }
         })
         .catch((err) => {

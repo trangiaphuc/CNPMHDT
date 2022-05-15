@@ -10,11 +10,12 @@ var bcrypt = require("bcryptjs");
 const fs = require("fs");
 
 exports.getCartDetails = (req, res) => {
-    Cart.findAll({
-        where: { userId: req.body.userId, isBuy: false, isDelete: false },
+    Cart.findOne({
+        where: { userId: req.body.userId },
     }).then((foundCart) => {
         CartDetail.findAll({
-            where: { cartId: foundCart.id, include: [{ model: Product }] },
+            where: { cartId: foundCart.id, isBuy: false },
+            include: [{ model: Product }],
         }).then((cartDetailList) => {
             foundCart.setDataValue("cartDetailList", cartDetailList);
             res.status(200).send({ result: foundCart });
@@ -40,6 +41,8 @@ exports.addToCart = (req, res) => {
                 .catch((err) => {
                     res.status(500).send({ result: err.message });
                 });
+
+            // res.status(200).send({ result: foundCart });
         })
         .catch((err) => {
             res.status(500).send({ result: err.message });
@@ -47,7 +50,7 @@ exports.addToCart = (req, res) => {
 };
 
 exports.editCartDetails = (req, res) => {
-    CartDetail.findOne({ where: { id: req.params.id } })
+    CartDetail.findOne({ where: { id: req.body.id } })
         .then((foundCartDetails) => {
             foundCartDetails
                 .update({
@@ -61,7 +64,7 @@ exports.editCartDetails = (req, res) => {
                     res.status(error).send({ result: err.message });
                 });
         })
-        .catch((error) => {
-            res.status(error).send({ result: err.message });
+        .catch((err) => {
+            res.status(500).send({ result: err.message });
         });
 };

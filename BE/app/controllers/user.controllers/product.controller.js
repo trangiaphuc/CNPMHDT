@@ -10,7 +10,7 @@ const QuantityUnit = db.quantityUnits;
 const CurrentInstock = db.currentInstocks;
 const CurrentInstockDetail = db.currentInstockDetails;
 const config = require("../../config/auth.config");
-const Op = db.Sequelize.Op;
+const { Sequelize, Op } = require("sequelize");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 const fs = require("fs");
@@ -168,20 +168,21 @@ exports.getProductWithModel = (req, res) => {
 exports.getRandomProductWithModel = (req, res) => {
     Product.findAll({
         include: [
-            { model: ProductColor },
+            // { model: ProductColor },
             { model: Brand },
             { model: QuantityUnit },
             { model: Image },
         ],
+        where: { modelId: null },
         order: Sequelize.literal("rand()"),
-        limit: 4,
+        limit: 5,
     }).then((productsList) => {
         if (productsList.length) {
             const productColorList = [];
             productsList.forEach((product) => {
                 const productImage = product.image;
                 const brand = product.brand;
-                const productColor = product.productColor;
+                // const productColor = product.productColor;
                 const quantityUnit = product.quantityUnit;
 
                 if (productImage) {
@@ -189,17 +190,17 @@ exports.getRandomProductWithModel = (req, res) => {
 
                     var base64ProductImage =
                         "data:image/png;base64," + Buffer.from(image).toString("base64");
-                    productColorList.push(productColor);
+                    // productColorList.push(productColor);
 
                     const brandName = brand.brandName;
                     const quantityUnitName = quantityUnit.quantityUnitName;
-                    const colorName = productColor.colorName;
-                    const colorCode = productColor.colorCode;
+                    // const colorName = productColor.colorName;
+                    // const colorCode = productColor.colorCode;
 
                     product.setDataValue("productBrand", brandName);
                     product.setDataValue("productQuantity", quantityUnitName);
-                    product.setDataValue("productColorName", colorName);
-                    product.setDataValue("productColorCode", colorCode);
+                    // product.setDataValue("productColorName", colorName);
+                    // product.setDataValue("productColorCode", colorCode);
                     product.setDataValue("productImage", base64ProductImage);
 
                     if (productsList.indexOf(product) == productsList.length - 1) {
@@ -209,7 +210,7 @@ exports.getRandomProductWithModel = (req, res) => {
 
                         res.status(200).send({
                             productList: productsList,
-                            productColorList: productColorList,
+                            // productColorList: productColorList,
                         });
                     }
                 }
@@ -235,26 +236,32 @@ exports.searchProductWithKeyword = (req, res) => {
             include: [{ model: Image }],
         })
         .then((productList) => {
-            productList.forEach((product) => {
-                Model.findOne({ where: { modelProductId: product.id } }).then(
-                    (foundModel) => {
-                        const productImage = product.image;
-                        const productModelId = foundModel.id;
-                        if (productImage) {
-                            const image = fs.readFileSync(__basedir + productImage.imageUri);
+            if (productList.length) {
+                productList.forEach((product) => {
+                    Model.findOne({ where: { modelProductId: product.id } }).then(
+                        (foundModel) => {
+                            const productImage = product.image;
+                            const productModelId = foundModel.id;
+                            if (productImage) {
+                                const image = fs.readFileSync(
+                                    __basedir + productImage.imageUri
+                                );
 
-                            var base64ProductImage =
-                                "data:image/png;base64," +
-                                Buffer.from(image).toString("base64");
-                            product.setDataValue("productImage", base64ProductImage);
-                            product.setDataValue("productModelId", productModelId);
-                            if (productList.indexOf(product) == productList.length - 1) {
-                                res.status(200).send({ result: productList });
+                                var base64ProductImage =
+                                    "data:image/png;base64," +
+                                    Buffer.from(image).toString("base64");
+                                product.setDataValue("productImage", base64ProductImage);
+                                product.setDataValue("productModelId", productModelId);
+                                if (productList.indexOf(product) == productList.length - 1) {
+                                    res.status(200).send({ result: productList });
+                                }
                             }
                         }
-                    }
-                );
-            });
+                    );
+                });
+            } else {
+                res.status(200).send({ result: productList });
+            }
         })
         .catch((err) => {
             res.status(500).send({ result: err.message });
@@ -305,29 +312,33 @@ exports.searchSameproductWithParams = (req, res) => {
             }, ],
         })
         .then((productList) => {
-            productList.forEach((product) => {
-                if (productImage) {
-                    Model.findOne({ where: { modelProductId: product.id } }).then(
-                        (model) => {
-                            const productModelId = model.id;
-                            const productImage = product.image;
-                            if (productImage) {
-                                const image = fs.readFileSync(
-                                    __basedir + productImage.imageUri
-                                );
-                                var base64ProductImage =
-                                    "data:image/png;base64," +
-                                    Buffer.from(image).toString("base64");
-                                product.setDataValue("productImage", base64ProductImage);
-                                product.setDataValue("productModelId", productModelId);
-                                if (productList.indexOf(product) == productList.length - 1) {
-                                    res.status(200).send({ result: productList });
+            if (productList.length) {
+                productList.forEach((product) => {
+                    const productImage = product.image;
+                    if (productImage) {
+                        Model.findOne({ where: { modelProductId: product.id } }).then(
+                            (model) => {
+                                const productModelId = model.id;
+                                if (productImage) {
+                                    const image = fs.readFileSync(
+                                        __basedir + productImage.imageUri
+                                    );
+                                    var base64ProductImage =
+                                        "data:image/png;base64," +
+                                        Buffer.from(image).toString("base64");
+                                    product.setDataValue("productImage", base64ProductImage);
+                                    product.setDataValue("productModelId", productModelId);
+                                    if (productList.indexOf(product) == productList.length - 1) {
+                                        res.status(200).send({ result: productList });
+                                    }
                                 }
                             }
-                        }
-                    );
-                }
-            });
+                        );
+                    }
+                });
+            } else {
+                res.status(200).send({ result: productList });
+            }
         })
         .catch((err) => {
             res.status(500).send({ message: err.message });
