@@ -44,6 +44,7 @@ require("./routes/general.routes/deliveryType.routes")(app);
 require("./routes/general.routes/mainGroup.routes")(app);
 require("./routes/general.routes/payableType.routes")(app);
 require("./routes/general.routes/store.routes")(app);
+require("./routes/general.routes/saleOrder.routes")(app);
 require("./routes/user.routes/cart.routes")(app);
 
 module.exports = app;

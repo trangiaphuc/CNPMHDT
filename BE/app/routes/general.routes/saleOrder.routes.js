@@ -14,7 +14,7 @@ module.exports = function(app) {
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
         ],
-        controller.getSalesOrderByUserId
+        controller.getSalesOrderListByUserId
     );
 
     app.post(
@@ -31,5 +31,10 @@ module.exports = function(app) {
             // verifySignUp.checkRolesExisted
         ],
         controller.addNewSaleOrder
+    );
+
+    app.post(
+        "/general/get-sale-order-detail", [],
+        controller.getSalesOrderDetailByUserId
     );
 };
