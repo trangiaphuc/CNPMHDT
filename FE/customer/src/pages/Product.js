@@ -143,7 +143,7 @@ const CardProduct = styled.div`
     margin-top: 10px;
     box-sizing: border-box;
     border: 1px solid #c4c4c4;
-    background-color: #c4c4c4;
+    background-color: #EFEFEF;
     transform: translateX(${(props) => props.tran}px);
     transition: all 0.25s ease;
     &:hover {

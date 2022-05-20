@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -6,6 +6,20 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Product, ProductCategories } from "../data";
 
 const ProductByCat = () => {
+    // const
+    // useEffect(() => {
+    //     const test = async () => {
+    //         try {
+    //             const res = await axios.get(
+    //                 "http://localhost:9000/general/get-maingroups-list"
+    //             );
+    //             setMainGroup(res.data.result);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+    //     test();
+    // }, []);
     return (
         <Container>
             <Content>
@@ -97,7 +111,8 @@ const HighToLow = styled.option`
 const LowToHigh = styled.option``;
 
 const ProductList = styled.div`
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
     margin-top: 20px;
 `;
@@ -108,12 +123,20 @@ const ImageProduct = styled.img`
     transition: all 0.25s ease;
 `;
 const CardProduct = styled.div`
-    display: inline-block;
-    width: 270px;
-    height: 400px;
-    padding: 15px;
-    border: 1px solid #ff3008;
     box-sizing: border-box;
+    display: inline-block;
+    margin: 10px 10px;
+    background-color: #efefef;
+    /* width: 270px; */
+    height: 400px;
+
+    padding: 15px 5px;
+    width: 250px;
+    /* height: 400px; */
+    /* border: 1px solid #ff3008; */
+    background-color: #efefef;
+
+    /* border: 1px solid #ff3008; */
     transform: translateX(${(props) => props.tran}px);
     transition: all 0.25s ease;
     &:hover {
@@ -129,6 +152,7 @@ const ContainerImage = styled.div`
     padding: 0;
     margin: 0;
     overflow: hidden;
+    border-radius: 15px;
 `;
 
 const ProductName = styled.h2`
@@ -153,6 +177,8 @@ const BuyProduct = styled.a`
     background-color: #ff3008;
     color: white;
     font-weight: 500;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
+    border-radius: 10px;
     cursor: pointer;
     &:hover {
         background-color: #c2230e;
@@ -164,6 +190,8 @@ const AddCart = styled.a`
     color: white;
     border-radius: 5px;
     background-color: #ff3008;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
+    border-radius: 10px;
     &:hover {
         background-color: #c2230e;
     }

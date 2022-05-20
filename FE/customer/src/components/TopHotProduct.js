@@ -1,6 +1,6 @@
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import React from "react";
 import styled from "styled-components";
 import { HotProduct } from "../data";
@@ -14,15 +14,15 @@ const TopHotProduct = () => {
         setItemtrans((prev) => {
             if (prev.at(0) === 0) {
                 return prev;
-            } else return prev.map((item) => item + 270);
+            } else return prev.map((item) => item + 275);
         });
     };
 
     const nextClick = () => {
         setItemtrans((prev) => {
-            if (prev.at(_items.length - 1) === (_items.length - 5) * -270) {
+            if (prev.at(_items.length - 1) === (_items.length - 5) * -275) {
                 return prev;
-            } else return prev.map((item) => item - 270);
+            } else return prev.map((item) => item - 275);
             // return prev.map((item) => item - 270);
         });
     };
@@ -130,6 +130,7 @@ const ContainerSlider = styled.div`
     display: flex;
     box-sizing: border-box;
     overflow: hidden;
+    justify-content: space-between;
 `;
 const ImageProduct = styled.img`
     object-fit: cover;
@@ -137,11 +138,14 @@ const ImageProduct = styled.img`
     transition: all 0.25s ease;
 `;
 const CardProduct = styled.div`
-    width: 270px;
-    height: 400px;
-    padding: 15px;
-    border: 1px solid #ff3008;
     box-sizing: border-box;
+    padding: 15px 5px;
+    margin: auto;
+    width: 250px;
+    height: 400px;
+    margin-right: 25px;
+    /* border: 1px solid #ff3008; */
+    background-color: #efefef;
     transform: translateX(${(props) => props.tran}px);
     transition: all 0.25s ease;
     &:hover {
@@ -156,6 +160,7 @@ const ContainerImage = styled.div`
     padding: 0;
     margin: 0;
     overflow: hidden;
+    border-radius: 15px;
 `;
 
 const ProductName = styled.h2`
@@ -181,6 +186,8 @@ const BuyProduct = styled.a`
     color: white;
     font-weight: 500;
     cursor: pointer;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
+    border-radius: 10px;
     &:hover {
         background-color: #c2230e;
     }
@@ -191,6 +198,8 @@ const AddCart = styled.a`
     color: white;
     border-radius: 5px;
     background-color: #ff3008;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
+    border-radius: 10px;
     &:hover {
         background-color: #c2230e;
     }

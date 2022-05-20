@@ -1,13 +1,14 @@
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 import ImportantDevicesIcon from "@mui/icons-material/ImportantDevices";
-import Badge from '@mui/material/Badge';
+import Badge from "@mui/material/Badge";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-const Navbar = () => {
+const Navbar = ({cart}) => {
+    // const [cart, setCart] = useState(1);
     return (
         <Container>
             <Wrapper>
@@ -33,9 +34,11 @@ const Navbar = () => {
                     </Auth>
                     <Cart>
                         <ThemeProvider theme={theme}>
-                            <Badge color="primary" badgeContent={4}>
-                                <ShoppingCartIcon />
-                            </Badge>
+                            <LinkCart href="/cart">
+                                <Badge1 color="primary" badgeContent={cart}>
+                                    <ShoppingCartIcon />
+                                </Badge1>
+                            </LinkCart>
                         </ThemeProvider>
                     </Cart>
                 </Right>
@@ -45,6 +48,12 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const Badge1 = styled(Badge)``;
+
+const LinkCart = styled.a`
+    color: white;
+`;
 
 const LinkHome = styled.a`
     text-decoration: none;
