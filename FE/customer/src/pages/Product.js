@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { CloudDone } from "@mui/icons-material";
 
 const Container = styled.div`
     height: 100vh;
@@ -143,7 +146,7 @@ const CardProduct = styled.div`
     margin-top: 10px;
     box-sizing: border-box;
     border: 1px solid #c4c4c4;
-    background-color: #EFEFEF;
+    background-color: #efefef;
     transform: translateX(${(props) => props.tran}px);
     transition: all 0.25s ease;
     &:hover {
@@ -240,7 +243,37 @@ const TickMark = styled.div`
     }
 `;
 const Product = () => {
-    const [color,setColor] = useState("");
+    const location = useLocation();
+    const [productList, setProductList] = useState([]);
+    // const [product, setProduct] = useState({});
+    const idPro = location.pathname.split("/")[2];
+    const [color, setColor] = useState("");
+    const brandId = "-1";
+    const minPrice = -1;
+    const maingroupId = -1;
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/user/get-product-model-with-params",
+                    {
+                        brandId,
+                        minPrice,
+                        maingroupId,
+                    }
+                );
+                setProductList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, [idPro]);
+    // console.log(productList);
+    // console.log(id);
+    var product= productList.find(obj=>{return String(obj.id)===idPro});
+    
     return (
         <div>
             <Navbar />
@@ -249,11 +282,11 @@ const Product = () => {
                 <Wrapper>
                     <Detail>
                         <NameProduct>
-                            <TextName>Nguyễn Văn Tú</TextName>
+                            <TextName>{product.productName}</TextName>
                         </NameProduct>
                         <ViewAndOption>
                             <ViewImageProduct>
-                                <ImageProductDetail src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/02/w300/lenovo-tab-m10-fhd-rel-thumb.jpg"></ImageProductDetail>
+                                <ImageProductDetail src={product.productImage}></ImageProductDetail>
                             </ViewImageProduct>
                             <Option>
                                 <LocationBuy>
@@ -270,22 +303,19 @@ const Product = () => {
                                 <PriceProduct>
                                     <Label>Giá:</Label>
                                     <TextPrice>
-                                        {(29900000).toLocaleString("de-DE")}đ
+                                        {(product.salePrice).toLocaleString("de-DE")}đ
                                     </TextPrice>
                                 </PriceProduct>
                                 <ChooseColor>
                                     <Label>Chọn màu sắc sản phẩm:</Label>
                                     <ColorOptions>
-                                        <Color >
+                                        <Color>
                                             <TickMark></TickMark>
                                         </Color>
-                                        <Color >
+                                        <Color>
                                             <TickMark></TickMark>
                                         </Color>
                                     </ColorOptions>
-                                    
-                                        
-                                    
                                 </ChooseColor>
 
                                 <BuyAndAddCart>

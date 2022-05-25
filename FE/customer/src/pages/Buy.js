@@ -1,9 +1,236 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
 
+const Buy = () => {
+    const [getGood, setGetGood] = useState([]);
+    const [methodPayment, setMethodPayment] = useState([]);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-delivery-type-list"
+                );
+                setGetGood(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-payable-type-list"
+                );
+                setMethodPayment(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+    console.log(getGood);
+    return (
+        <div>
+            <Navbar />
+            <Categories />
+            <Container>
+                <Wrapper>
+                    <CartArea>
+                        <BranchName>
+                            Bạn đang xem giỏ hàng mua tại khu vực
+                            <LocationBranch> Hồ Chí Minh</LocationBranch>
+                        </BranchName>
+                        <CartContainer>
+                            <CartProduct>
+                                <CartHeader>
+                                    <CartTitle>Sản Phẩm</CartTitle>
+                                    <CartPriceTitle>Đơn Giá</CartPriceTitle>
+                                    <CartQuantityTitle>
+                                        Số Lượng
+                                    </CartQuantityTitle>
+                                    <CartSumPriceTitle>
+                                        Thành Tiền
+                                    </CartSumPriceTitle>
+                                    <CartActionTitle>Thao Tác</CartActionTitle>
+                                </CartHeader>
+                                <CartBody>
+                                    <CartProductList>
+                                        <CartProductItem index="chan">
+                                            <CartInfo>
+                                                <CartProductImage>
+                                                    <LinkDetail>
+                                                        <ProductImage></ProductImage>
+                                                    </LinkDetail>
+                                                </CartProductImage>
+                                                <ProductInfo>
+                                                    <ProductName>
+                                                        Iphone 13 promax
+                                                    </ProductName>
+                                                    <ProductPrice>
+                                                        <Price>
+                                                            29.990.000đ
+                                                        </Price>
+                                                    </ProductPrice>
+                                                    <ProductQuantity>
+                                                        <Quantity>1</Quantity>
+                                                    </ProductQuantity>
+                                                    <ProductRealPrice>
+                                                        <RealPrice>
+                                                            29.990.000đ
+                                                        </RealPrice>
+                                                    </ProductRealPrice>
+                                                </ProductInfo>
+                                            </CartInfo>
+                                            <CartAction>
+                                                <CartDelete>Xoá</CartDelete>
+                                            </CartAction>
+                                        </CartProductItem>
+
+                                        <CartProductItem index="le">
+                                            <CartInfo>
+                                                <CartProductImage>
+                                                    <LinkDetail>
+                                                        <ProductImage></ProductImage>
+                                                    </LinkDetail>
+                                                </CartProductImage>
+                                                <ProductInfo>
+                                                    <ProductName>
+                                                        Iphone 13 promax
+                                                    </ProductName>
+                                                    <ProductPrice>
+                                                        <Price>
+                                                            29.990.000đ
+                                                        </Price>
+                                                    </ProductPrice>
+                                                    <ProductQuantity>
+                                                        <Quantity>1</Quantity>
+                                                    </ProductQuantity>
+                                                    <ProductRealPrice>
+                                                        <RealPrice>
+                                                            29.990.000đ
+                                                        </RealPrice>
+                                                    </ProductRealPrice>
+                                                </ProductInfo>
+                                            </CartInfo>
+                                            <CartAction>
+                                                <CartDelete>Xoá</CartDelete>
+                                            </CartAction>
+                                        </CartProductItem>
+                                    </CartProductList>
+                                </CartBody>
+                            </CartProduct>
+                        </CartContainer>
+                    </CartArea>
+
+                    <InfoCheckOut>
+                        <FormCheckOut>
+                            <ChooseGetGoods>
+                                <GetGoodTitle>Cách thức nhận hàng</GetGoodTitle>
+                                {getGood.map((item, i, a) => {
+                                    if (i === 0) {
+                                        return (
+                                            <GetGoodsItem>
+                                                <RadioGetGoods
+                                                    type="radio"
+                                                    name="choose_get_good"
+                                                    value={i}
+                                                    checked="checked"
+                                                ></RadioGetGoods>
+                                                <LabelGetGoods>
+                                                    {item.deliveryType}
+                                                </LabelGetGoods>
+                                            </GetGoodsItem>
+                                        );
+                                    } else {
+                                        return (
+                                            <GetGoodsItem>
+                                                <RadioGetGoods
+                                                    type="radio"
+                                                    name="choose_get_good"
+                                                    value={i}
+                                                ></RadioGetGoods>
+                                                <LabelGetGoods>
+                                                    {item.deliveryType}
+                                                </LabelGetGoods>
+                                            </GetGoodsItem>
+                                        );
+                                    }
+                                })}
+                            </ChooseGetGoods>
+                            <MethodPayment>
+                                <MethodPaymentTitle>
+                                    Phương thức thanh toán
+                                </MethodPaymentTitle>
+                                {methodPayment.map((item, i, a) => {
+                                    if (i === 0) {
+                                        return (
+                                            <MethodPaymentItem>
+                                                <RadioPayment
+                                                    type="radio"
+                                                    name="choose_payment"
+                                                    value={i}
+                                                    checked="checked"
+                                                ></RadioPayment>
+                                                <LabelPayment>
+                                                    {item.payableTypeName}
+                                                </LabelPayment>
+                                            </MethodPaymentItem>
+                                        );
+                                    } else {
+                                        return (
+                                            <MethodPaymentItem>
+                                                <RadioPayment
+                                                    type="radio"
+                                                    name="choose_payment"
+                                                    value={i}
+                                                ></RadioPayment>
+                                                <LabelPayment>
+                                                    {item.payableTypeName}
+                                                </LabelPayment>
+                                            </MethodPaymentItem>
+                                        );
+                                    }
+                                })}
+                            </MethodPayment>
+                            <InfoCheckout>
+                                <NoteCheckout>Ghi chú:</NoteCheckout>
+                                <TextAreaNote
+                                    name="note"
+                                    rows="7"
+                                    placeholder="Nhập ghi chú..."
+                                ></TextAreaNote>
+
+                                <Info>
+                                    <TotalPrice>
+                                        <TotalTitleProduct>
+                                            Tổng tiền sản phẩm
+                                        </TotalTitleProduct>
+                                        <TotalPriceProduct>
+                                            29.990.000
+                                        </TotalPriceProduct>
+                                    </TotalPrice>
+                                    <TotalCheckout>
+                                        <TotalTitle>Tổng Thanh toán</TotalTitle>
+                                        <TotalPricePay>
+                                            29.990.000
+                                        </TotalPricePay>
+                                    </TotalCheckout>
+                                    <Order>Đặt hàng</Order>
+                                </Info>
+                            </InfoCheckout>
+                        </FormCheckOut>
+                    </InfoCheckOut>
+                </Wrapper>
+            </Container>
+        </div>
+    );
+};
 const Container = styled.div`
     width: 1350px;
     margin: auto;
@@ -244,186 +471,5 @@ const Order = styled.button`
     border: none;
     cursor: pointer;
 `;
-
-const Buy = () => {
-    return (
-        <div>
-            <Navbar />
-            <Categories />
-            <Container>
-                <Wrapper>
-                    <CartArea>
-                        <BranchName>
-                            Bạn đang xem giỏ hàng mua tại khu vực
-                            <LocationBranch> Hồ Chí Minh</LocationBranch>
-                        </BranchName>
-                        <CartContainer>
-                            <CartProduct>
-                                <CartHeader>
-                                    <CartTitle>Sản Phẩm</CartTitle>
-                                    <CartPriceTitle>Đơn Giá</CartPriceTitle>
-                                    <CartQuantityTitle>
-                                        Số Lượng
-                                    </CartQuantityTitle>
-                                    <CartSumPriceTitle>
-                                        Thành Tiền
-                                    </CartSumPriceTitle>
-                                    <CartActionTitle>Thao Tác</CartActionTitle>
-                                </CartHeader>
-                                <CartBody>
-                                    <CartProductList>
-                                        <CartProductItem index="chan">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-
-                                        <CartProductItem index="le">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-                                    </CartProductList>
-                                </CartBody>
-                            </CartProduct>
-                        </CartContainer>
-                    </CartArea>
-
-                    <InfoCheckOut>
-                        <FormCheckOut>
-                            <ChooseGetGoods>
-                                <GetGoodTitle>Cách thức nhận hàng</GetGoodTitle>
-                                <GetGoodsItem>
-                                    <RadioGetGoods
-                                        type="radio"
-                                        name="choose_get_good"
-                                        value="1"
-                                        checked="checked"
-                                    ></RadioGetGoods>
-                                    <LabelGetGoods>
-                                        Giao hàng tận nơi
-                                    </LabelGetGoods>
-                                </GetGoodsItem>
-                                <GetGoodsItem>
-                                    <RadioGetGoods
-                                        type="radio"
-                                        name="choose_get_good"
-                                        value="2"
-                                    ></RadioGetGoods>
-                                    <LabelGetGoods>
-                                        Giao hàng tại cửa hàng
-                                    </LabelGetGoods>
-                                </GetGoodsItem>
-                            </ChooseGetGoods>
-                            <MethodPayment>
-                                <MethodPaymentTitle>
-                                    Phương thức thanh toán
-                                </MethodPaymentTitle>
-                                <MethodPaymentItem>
-                                    <RadioPayment
-                                        type="radio"
-                                        name="choose_payment"
-                                        value="1"
-                                        checked="checked"
-                                    ></RadioPayment>
-                                    <LabelPayment>
-                                        Thanh toán khi nhận hàng
-                                    </LabelPayment>
-                                </MethodPaymentItem>
-                                <MethodPaymentItem>
-                                    <RadioPayment
-                                        type="radio"
-                                        name="choose_payment"
-                                        value="2"
-                                    ></RadioPayment>
-                                    <LabelPayment>
-                                        Chuyển khoản online
-                                    </LabelPayment>
-                                </MethodPaymentItem>
-                            </MethodPayment>
-
-                            <InfoCheckout>
-                                <NoteCheckout>Ghi chú:</NoteCheckout>
-                                <TextAreaNote
-                                    name="note"
-                                    rows="7"
-                                    placeholder="Nhập ghi chú..."
-                                ></TextAreaNote>
-
-                                <Info>
-                                    <TotalPrice>
-                                        <TotalTitleProduct>
-                                            Tổng tiền sản phẩm
-                                        </TotalTitleProduct>
-                                        <TotalPriceProduct>
-                                            29.990.000
-                                        </TotalPriceProduct>
-                                    </TotalPrice>
-                                    <TotalCheckout>
-                                        <TotalTitle>Tổng Thanh toán</TotalTitle>
-                                        <TotalPricePay>
-                                            29.990.000
-                                        </TotalPricePay>
-                                    </TotalCheckout>
-                                    <Order>Đặt hàng</Order>
-                                </Info>
-                            </InfoCheckout>
-                        </FormCheckOut>
-                    </InfoCheckOut>
-                </Wrapper>
-            </Container>
-        </div>
-    );
-};
 
 export default Buy;

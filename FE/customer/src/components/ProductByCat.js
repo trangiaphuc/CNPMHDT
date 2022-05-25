@@ -6,27 +6,53 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Product, ProductCategories } from "../data";
 
 const ProductByCat = () => {
-    // const
-    // useEffect(() => {
-    //     const test = async () => {
-    //         try {
-    //             const res = await axios.get(
-    //                 "http://localhost:9000/general/get-maingroups-list"
-    //             );
-    //             setMainGroup(res.data.result);
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     };
-    //     test();
-    // }, []);
+    const [brandList, setBrandList] = useState([]);
+    const [product, setProduct] = useState([]);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-brand-list"
+                );
+                setBrandList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+    const brandId = "-1";
+    const minPrice = -1;
+    const maingroupId = -1;
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/user/get-product-model-with-params",
+                     {
+                            brandId,
+                            minPrice,
+                            maingroupId,
+                        },
+                    
+                );
+                setProduct(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+    console.log(product);
     return (
         <Container>
             <Content>
                 <ProductCat>
                     <Category>Hãng</Category>
-                    {ProductCategories.map((item) => (
-                        <CategoryItem key={item.id}>{item.name}</CategoryItem>
+                    {brandList.map((item) => (
+                        <CategoryItem key={item.id}>
+                            {item.brandName}
+                        </CategoryItem>
                     ))}
                 </ProductCat>
                 <SortPrice>
@@ -38,20 +64,20 @@ const ProductByCat = () => {
             </Content>
 
             <ProductList>
-                {Product.map((item, idx) => (
+                {product.map((item, idx) => (
                     <CardProduct key={item.id}>
                         <ContainerImage>
-                            <ImageProduct src={item.image}></ImageProduct>
+                            <ImageProduct src={item.productImage}></ImageProduct>
                         </ContainerImage>
                         <InfoProduct>
                             <TitleProduct>
                                 <ProductName>
-                                    <LinkDetail href="#">
-                                        {item.name}
+                                    <LinkDetail href={"/product/"+item.id}>
+                                        {item.productName}
                                     </LinkDetail>
                                 </ProductName>
                                 <ProductPrice>
-                                    {item.price.toLocaleString("de-DE")}đ
+                                    {item.salePrice.toLocaleString("de-DE")}đ
                                 </ProductPrice>
                             </TitleProduct>
                             <Behavior>
