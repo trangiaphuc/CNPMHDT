@@ -5,7 +5,219 @@ import Navbar from "../components/Navbar";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { CloudDone } from "@mui/icons-material";
+
+const Product = () => {
+    const location = useLocation();
+    const [productList, setProductList] = useState([]);
+    const [colorList, setColorList] = useState([]);
+    const [product, setProduct] = useState({});
+    const [index, setIndex] = useState(0);
+    const modelId = location.pathname.split("/")[2];
+    const storeId = 1;
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/user/get-all-product-by-model",
+                    {
+                        modelId,
+                        storeId,
+                    }
+                );
+                setColorList(res.data.productColorList);
+                setProductList(res.data.productList);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, [modelId]);
+    // useEffect(() => {
+    //     const test = async () => {
+    //         try {
+    //             const res = await axios.post(
+    //                 "http://localhost:9000/user/get-all-product-by-model",
+    //                 {
+    //                     modelId,
+    //                     storeId,
+    //                 }
+    //             );
+    //             setProductList(res.data.productList);
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+    //     test();
+    // }, []);
+    function handleChangeColor(proId) {
+        productList.map((item, i) => {
+            if (item.id === proId) {
+                setIndex(i);
+                setProduct(item);
+            }
+        });
+    }
+    return (
+        <div>
+            <Navbar />
+            <Categories />
+            <Container>
+                <Wrapper>
+                    <Detail>
+                        <NameProduct>
+                            <TextName>
+                                {productList[index]?.productName}
+                            </TextName>
+                        </NameProduct>
+                        <ViewAndOption>
+                            <ViewImageProduct>
+                                <ImageProductDetail
+                                    src={productList[index]?.productImage}
+                                ></ImageProductDetail>
+                            </ViewImageProduct>
+                            <Option>
+                                <LocationBuy>
+                                    <Label>Chọn nơi mua:</Label>
+                                    <SelectLocation>
+                                        <OptionLocation>
+                                            Thành phố HCM
+                                        </OptionLocation>
+                                        <OptionLocation>Hà Nội</OptionLocation>
+                                        <OptionLocation>Đà Nẵng</OptionLocation>
+                                        <OptionLocation>Cần Thơ</OptionLocation>
+                                    </SelectLocation>
+                                </LocationBuy>
+                                <PriceProduct>
+                                    <Label>Giá:</Label>
+                                    <TextPrice>
+                                        {productList[
+                                            index
+                                        ]?.salePrice?.toLocaleString("de-DE")}
+                                        đ
+                                    </TextPrice>
+                                </PriceProduct>
+                                <ChooseColor>
+                                    <Label>Chọn màu sắc sản phẩm:</Label>
+                                    <ColorOptions>
+                                        {colorList.map((item) => (
+                                            <Color
+                                                key={item.id}
+                                                colorCode={item.colorCode}
+                                                productId={item.productId}
+                                                onClick={() =>
+                                                    handleChangeColor(
+                                                        item.productId
+                                                    )
+                                                }
+                                            >
+                                                <TickMark></TickMark>
+                                            </Color>
+                                        ))}
+                                    </ColorOptions>
+                                </ChooseColor>
+
+                                <BuyAndAddCart>
+                                    <Buy href="#">Mua</Buy>
+                                    <AddToCart>
+                                        <AddCartIcon />
+                                    </AddToCart>
+                                </BuyAndAddCart>
+                            </Option>
+                        </ViewAndOption>
+                        <InformationProduct>
+                            <TitleInformation>
+                                Thông tin sản phẩm
+                            </TitleInformation>
+                            <Information>
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since
+                                the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen
+                                book. It has survived not only five centuries,
+                                but also the leap into electronic typesetting,
+                                remaining essentially unchanged. It was
+                                popularised in the 1960s with the release of
+                                Letraset sheets containing Lorem Ipsum passages,
+                                and more recently with desktop publishing
+                                software like Aldus PageMaker including versions
+                                of Lorem Ipsum.
+                            </Information>
+                        </InformationProduct>
+                    </Detail>
+                    <SameProduct>
+                        <Title>Sản phẩm tương tự</Title>
+                        <SameProductList>
+                            <CardProduct>
+                                <ContainerImage>
+                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
+                                </ContainerImage>
+                                <InfoProduct>
+                                    <TitleProduct>
+                                        <ProductName>
+                                            <LinkDetail href="#">
+                                                Iphone 13 Promax
+                                            </LinkDetail>
+                                        </ProductName>
+                                        <ProductPrice>
+                                            {(29900000).toLocaleString("de-DE")}
+                                            đ
+                                        </ProductPrice>
+                                    </TitleProduct>
+                                    <ViewDetail>
+                                        Xem chi tiết &gt;&gt;
+                                    </ViewDetail>
+                                </InfoProduct>
+                            </CardProduct>
+                            <CardProduct>
+                                <ContainerImage>
+                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
+                                </ContainerImage>
+                                <InfoProduct>
+                                    <TitleProduct>
+                                        <ProductName>
+                                            <LinkDetail href="#">
+                                                Iphone 13 Promax
+                                            </LinkDetail>
+                                        </ProductName>
+                                        <ProductPrice>
+                                            {(29900000).toLocaleString("de-DE")}
+                                            đ
+                                        </ProductPrice>
+                                    </TitleProduct>
+                                    <ViewDetail>
+                                        Xem chi tiết &gt;&gt;
+                                    </ViewDetail>
+                                </InfoProduct>
+                            </CardProduct>
+                            <CardProduct>
+                                <ContainerImage>
+                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
+                                </ContainerImage>
+                                <InfoProduct>
+                                    <TitleProduct>
+                                        <ProductName>
+                                            <LinkDetail href="#">
+                                                Iphone 13 Promax
+                                            </LinkDetail>
+                                        </ProductName>
+                                        <ProductPrice>
+                                            {(29900000).toLocaleString("de-DE")}
+                                            đ
+                                        </ProductPrice>
+                                    </TitleProduct>
+                                    <ViewDetail>
+                                        Xem chi tiết &gt;&gt;
+                                    </ViewDetail>
+                                </InfoProduct>
+                            </CardProduct>
+                        </SameProductList>
+                    </SameProduct>
+                </Wrapper>
+            </Container>
+        </div>
+    );
+};
 
 const Container = styled.div`
     height: 100vh;
@@ -78,6 +290,7 @@ const Buy = styled.a`
     padding: 5px 70px;
     border-radius: 5px;
     background-color: #ff3008;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
     color: white;
     font-weight: 500;
     cursor: pointer;
@@ -95,6 +308,8 @@ const AddToCart = styled.a`
     background-color: #ff3008;
     margin-left: 10px;
     position: relative;
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
+
     &:hover {
         background-color: #c2230e;
     }
@@ -211,7 +426,7 @@ const Color = styled.div`
     box-sizing: border-box;
     height: 40px;
     width: 40px;
-    background-color: pink;
+    background-color: ${(props) => props.colorCode};
     position: relative;
     border: 2px solid transparent;
     &:hover {
@@ -242,182 +457,4 @@ const TickMark = styled.div`
         box-sizing: border-box;
     }
 `;
-const Product = () => {
-    const location = useLocation();
-    const [productList, setProductList] = useState([]);
-    // const [product, setProduct] = useState({});
-    const idPro = location.pathname.split("/")[2];
-    const [color, setColor] = useState("");
-    const brandId = "-1";
-    const minPrice = -1;
-    const maingroupId = -1;
-
-    useEffect(() => {
-        const test = async () => {
-            try {
-                const res = await axios.post(
-                    "http://localhost:9000/user/get-product-model-with-params",
-                    {
-                        brandId,
-                        minPrice,
-                        maingroupId,
-                    }
-                );
-                setProductList(res.data.result);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        test();
-    }, [idPro]);
-    // console.log(productList);
-    // console.log(id);
-    var product= productList.find(obj=>{return String(obj.id)===idPro});
-    
-    return (
-        <div>
-            <Navbar />
-            <Categories />
-            <Container>
-                <Wrapper>
-                    <Detail>
-                        <NameProduct>
-                            <TextName>{product.productName}</TextName>
-                        </NameProduct>
-                        <ViewAndOption>
-                            <ViewImageProduct>
-                                <ImageProductDetail src={product.productImage}></ImageProductDetail>
-                            </ViewImageProduct>
-                            <Option>
-                                <LocationBuy>
-                                    <Label>Chọn nơi mua:</Label>
-                                    <SelectLocation>
-                                        <OptionLocation>
-                                            Thành phố HCM
-                                        </OptionLocation>
-                                        <OptionLocation>Hà Nội</OptionLocation>
-                                        <OptionLocation>Đà Nẵng</OptionLocation>
-                                        <OptionLocation>Cần Thơ</OptionLocation>
-                                    </SelectLocation>
-                                </LocationBuy>
-                                <PriceProduct>
-                                    <Label>Giá:</Label>
-                                    <TextPrice>
-                                        {(product.salePrice).toLocaleString("de-DE")}đ
-                                    </TextPrice>
-                                </PriceProduct>
-                                <ChooseColor>
-                                    <Label>Chọn màu sắc sản phẩm:</Label>
-                                    <ColorOptions>
-                                        <Color>
-                                            <TickMark></TickMark>
-                                        </Color>
-                                        <Color>
-                                            <TickMark></TickMark>
-                                        </Color>
-                                    </ColorOptions>
-                                </ChooseColor>
-
-                                <BuyAndAddCart>
-                                    <Buy href="#">Mua</Buy>
-                                    <AddToCart>
-                                        <AddCartIcon />
-                                    </AddToCart>
-                                </BuyAndAddCart>
-                            </Option>
-                        </ViewAndOption>
-                        <InformationProduct>
-                            <TitleInformation>
-                                Thông tin sản phẩm
-                            </TitleInformation>
-                            <Information>
-                                Lorem Ipsum is simply dummy text of the printing
-                                and typesetting industry. Lorem Ipsum has been
-                                the industry's standard dummy text ever since
-                                the 1500s, when an unknown printer took a galley
-                                of type and scrambled it to make a type specimen
-                                book. It has survived not only five centuries,
-                                but also the leap into electronic typesetting,
-                                remaining essentially unchanged. It was
-                                popularised in the 1960s with the release of
-                                Letraset sheets containing Lorem Ipsum passages,
-                                and more recently with desktop publishing
-                                software like Aldus PageMaker including versions
-                                of Lorem Ipsum.
-                            </Information>
-                        </InformationProduct>
-                    </Detail>
-                    <SameProduct>
-                        <Title>Sản phẩm tương tự</Title>
-                        <SameProductList>
-                            <CardProduct>
-                                <ContainerImage>
-                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
-                                </ContainerImage>
-                                <InfoProduct>
-                                    <TitleProduct>
-                                        <ProductName>
-                                            <LinkDetail href="#">
-                                                Iphone 13 Promax
-                                            </LinkDetail>
-                                        </ProductName>
-                                        <ProductPrice>
-                                            {(29900000).toLocaleString("de-DE")}
-                                            đ
-                                        </ProductPrice>
-                                    </TitleProduct>
-                                    <ViewDetail>
-                                        Xem chi tiết &gt;&gt;
-                                    </ViewDetail>
-                                </InfoProduct>
-                            </CardProduct>
-                            <CardProduct>
-                                <ContainerImage>
-                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
-                                </ContainerImage>
-                                <InfoProduct>
-                                    <TitleProduct>
-                                        <ProductName>
-                                            <LinkDetail href="#">
-                                                Iphone 13 Promax
-                                            </LinkDetail>
-                                        </ProductName>
-                                        <ProductPrice>
-                                            {(29900000).toLocaleString("de-DE")}
-                                            đ
-                                        </ProductPrice>
-                                    </TitleProduct>
-                                    <ViewDetail>
-                                        Xem chi tiết &gt;&gt;
-                                    </ViewDetail>
-                                </InfoProduct>
-                            </CardProduct>
-                            <CardProduct>
-                                <ContainerImage>
-                                    <ImageProduct src="https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"></ImageProduct>
-                                </ContainerImage>
-                                <InfoProduct>
-                                    <TitleProduct>
-                                        <ProductName>
-                                            <LinkDetail href="#">
-                                                Iphone 13 Promax
-                                            </LinkDetail>
-                                        </ProductName>
-                                        <ProductPrice>
-                                            {(29900000).toLocaleString("de-DE")}
-                                            đ
-                                        </ProductPrice>
-                                    </TitleProduct>
-                                    <ViewDetail>
-                                        Xem chi tiết &gt;&gt;
-                                    </ViewDetail>
-                                </InfoProduct>
-                            </CardProduct>
-                        </SameProductList>
-                    </SameProduct>
-                </Wrapper>
-            </Container>
-        </div>
-    );
-};
 export default Product;

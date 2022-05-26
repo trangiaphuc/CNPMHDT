@@ -3,11 +3,12 @@ import styled from "styled-components";
 import axios from "axios";
 
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Product, ProductCategories } from "../data";
 
 const ProductByCat = () => {
     const [brandList, setBrandList] = useState([]);
+    const [model, setModel] = useState([]);
     const [product, setProduct] = useState([]);
+
     useEffect(() => {
         const test = async () => {
             try {
@@ -20,30 +21,22 @@ const ProductByCat = () => {
             }
         };
         test();
-    }, []);
-    const brandId = "-1";
-    const minPrice = -1;
-    const maingroupId = -1;
+    }, [brandList]);
     useEffect(() => {
         const test = async () => {
             try {
-                const res = await axios.post(
-                    "http://localhost:9000/user/get-product-model-with-params",
-                     {
-                            brandId,
-                            minPrice,
-                            maingroupId,
-                        },
-                    
+                const res = await axios.get(
+                    "http://localhost:9000/user/get-all-product-model"
                 );
-                setProduct(res.data.result);
+                setModel(res.data.result);
             } catch (err) {
                 console.log(err);
             }
         };
         test();
-    }, []);
-    console.log(product);
+        
+    }, [model]);
+    console.log(model)
     return (
         <Container>
             <Content>
@@ -64,20 +57,22 @@ const ProductByCat = () => {
             </Content>
 
             <ProductList>
-                {product.map((item, idx) => (
+                {model.map((item, idx) => (
                     <CardProduct key={item.id}>
                         <ContainerImage>
-                            <ImageProduct src={item.productImage}></ImageProduct>
+                            <ImageProduct
+                                src={item.productModel.productImage}
+                            ></ImageProduct>
                         </ContainerImage>
                         <InfoProduct>
                             <TitleProduct>
                                 <ProductName>
-                                    <LinkDetail href={"/product/"+item.id}>
-                                        {item.productName}
+                                    <LinkDetail href={"/product/" + item.id}>
+                                        {item.modelName}
                                     </LinkDetail>
                                 </ProductName>
                                 <ProductPrice>
-                                    {item.salePrice.toLocaleString("de-DE")}đ
+                                    {item.productModel.salePrice.toLocaleString("de-DE")}đ
                                 </ProductPrice>
                             </TitleProduct>
                             <Behavior>
