@@ -9,6 +9,8 @@ const Brand = db.brands;
 const QuantityUnit = db.quantityUnits;
 const CurrentInstock = db.currentInstocks;
 const CurrentInstockDetail = db.currentInstockDetails;
+const AccessoryGroup = db.accessoryGroups;
+const Accessory = db.accessories;
 const config = require("../../config/auth.config");
 const { Sequelize, Op } = require("sequelize");
 var jwt = require("jsonwebtoken");
@@ -92,6 +94,11 @@ exports.getProductWithModel = (req, res) => {
                     where: { productId: req.body.modelId },
                 });
 
+                const productAccessoryGroup = await AccessoryGroup.findAll({
+                    where: { subgroupId: product.subgroupId },
+                    include: { model: Accessory },
+                });
+
                 if (productContentList.length > 0) {
                     productContentList.forEach((productContent) => {
                         const isImage = productContent.isImage;
@@ -139,6 +146,7 @@ exports.getProductWithModel = (req, res) => {
                     "productCurrentInstockStoreId",
                     productCurrentInstocks
                 );
+                product.setDataValue("productAccessoryGroup", productAccessoryGroup);
                 // product.setDataValue(
                 //     "productCurrentInstockStoreId",
                 //     currentInstockStoreId
