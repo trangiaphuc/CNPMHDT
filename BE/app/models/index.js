@@ -97,8 +97,18 @@ db.provinces.hasOne(db.users);
 db.districts.hasOne(db.users);
 db.wards.hasOne(db.users);
 db.userStatuses.hasOne(db.users);
-db.users.belongsToMany(db.roles, { through: db.userRoles });
-db.roles.belongsToMany(db.users, { through: db.userRoles });
+// db.users.belongsToMany(db.roles, { through: db.userRoles });
+// db.roles.belongsToMany(db.users, { through: db.userRoles });
+db.roles.belongsToMany(db.users, {
+    through: "user_roles",
+    foreignKey: "roleId",
+    otherKey: "userId",
+});
+db.users.belongsToMany(db.roles, {
+    through: "user_roles",
+    foreignKey: "userId",
+    otherKey: "roleId",
+});
 db.maingroups.hasMany(db.subgroups);
 // db.maingroups.hasOne(db.products);
 // db.subgroups.hasOne(db.products);

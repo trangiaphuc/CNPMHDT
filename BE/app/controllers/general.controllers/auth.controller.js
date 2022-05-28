@@ -88,16 +88,19 @@ exports.signin = (req, res) => {
             });
             var authorities = [];
             user.getRoles().then((roles) => {
-                for (let i = 0; i < roles.length; i++) {
-                    authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                console.log(roles.length + "phucphuc");
+                if (roles.length) {
+                    for (let i = 0; i < roles.length; i++) {
+                        authorities.push("ROLE_" + roles[i].roleName.toUpperCase());
+                    }
+                    res.status(200).send({
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        roles: authorities,
+                        accessToken: token,
+                    });
                 }
-                res.status(200).send({
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    roles: authorities,
-                    accessToken: token,
-                });
             });
         })
         .catch((err) => {
