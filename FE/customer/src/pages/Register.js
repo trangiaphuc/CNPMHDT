@@ -1,9 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import HomeIcon from "@mui/icons-material/Home";
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../redux/apiRequest";
+
+const Register = () => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        const newUser = {
+            email: email,
+            password: password,
+            username: username,
+        };
+        registerUser(newUser, dispatch, navigate);
+    };
+    return (
+        <div>
+            <Navbar />
+            <Categories />
+            <Container>
+                <Wrapper>
+                    <Title>Đăng Ký</Title>
+                    <Form onSubmit={handleRegister}>
+                        <Input
+                            type="text"
+                            placeholder="name"
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="username"
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            type="password"
+                            placeholder="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Input
+                            type="password"
+                            placeholder="confirm password"
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <Behavior>
+                            <Button>CREATE</Button>
+                            <LinkHome href="/">
+                                <Home fontSize="large" />
+                            </LinkHome>
+                        </Behavior>
+                    </Form>
+                </Wrapper>
+            </Container>
+        </div>
+    );
+};
 
 const Container = styled.div`
     width: 1350px;
@@ -35,7 +103,7 @@ const Behavior = styled.div`
 `;
 const LinkHome = styled.a`
     width: 200px;
-    background-color: #2B2BFF;
+    background-color: #2b2bff;
     color: black;
 `;
 const Button = styled.button`
@@ -46,7 +114,6 @@ const Button = styled.button`
     color: black;
     cursor: pointer;
     font-weight: 600;
-
 `;
 
 const Home = styled(HomeIcon)`
@@ -54,31 +121,5 @@ const Home = styled(HomeIcon)`
     margin-top: 5px;
     margin-left: 87.5px;
 `;
-const Register = () => {
-    return (
-        <div>
-            <Navbar />
-            <Categories />
-            <Container>
-                <Wrapper>
-                    <Title>Đăng Ký</Title>
-                    <Form>
-                        <Input placeholder="name" />
-                        <Input placeholder="username" />
-                        <Input placeholder="email" />
-                        <Input placeholder="password" />
-                        <Input placeholder="confirm password" />
-                    </Form>
-                    <Behavior>
-                        <Button>CREATE</Button>
-                        <LinkHome href="/">
-                            <Home fontSize="large"/>
-                        </LinkHome>
-                    </Behavior>
-                </Wrapper>
-            </Container>
-        </div>
-    );
-};
 
 export default Register;

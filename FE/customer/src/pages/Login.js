@@ -1,9 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
+import { loginUser } from "../redux/apiRequest";
 
+const Login = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const newUser = {
+            username: username,
+            password: password,
+        };
+        loginUser(newUser, dispatch, navigate);
+    };
+    return (
+        <div>
+            <Navbar />
+            <Categories />
+            <Container>
+                <Wrapper>
+                    <Title>Đăng Nhập</Title>
+                    <Form onSubmit={handleLogin}>
+                        <Input
+                            type="text"
+                            placeholder="username"
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button>Login</Button>
+                        <ForgotPass href="#">Quên mật khẩu?</ForgotPass>
+                    </Form>
+                </Wrapper>
+            </Container>
+        </div>
+    );
+};
 const Container = styled.div`
     width: 1350px;
     margin: auto;
@@ -51,26 +93,4 @@ const ForgotPass = styled.a`
     text-decoration: none;
     color: black;
 `;
-
-const Login = () => {
-    return (
-        <div>
-            <Navbar />
-            <Categories />
-            <Container>
-                <Wrapper>
-                    <Title>Đăng Nhập</Title>
-                    <Form>
-                        <Input placeholder="username" />
-                        <Input placeholder="password" />
-                    </Form>
-
-                    <Button>Login</Button>
-                    <ForgotPass href="#">Quên mật khẩu?</ForgotPass>
-                </Wrapper>
-            </Container>
-        </div>
-    );
-};
-
 export default Login;

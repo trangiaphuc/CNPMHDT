@@ -21,7 +21,7 @@ const ProductByCat = () => {
             }
         };
         test();
-    }, [brandList]);
+    }, []);
     useEffect(() => {
         const test = async () => {
             try {
@@ -34,15 +34,14 @@ const ProductByCat = () => {
             }
         };
         test();
-        
-    }, [model]);
-    console.log(model)
+    }, []);
+    console.log(model);
     return (
         <Container>
             <Content>
                 <ProductCat>
                     <Category>Hãng</Category>
-                    {brandList.map((item) => (
+                    {brandList?.map((item) => (
                         <CategoryItem key={item.id}>
                             {item.brandName}
                         </CategoryItem>
@@ -57,22 +56,29 @@ const ProductByCat = () => {
             </Content>
 
             <ProductList>
-                {model.map((item, idx) => (
-                    <CardProduct key={item.id}>
+                {model?.map((item, idx) => (
+                    <CardProduct key={item?.id}>
                         <ContainerImage>
                             <ImageProduct
-                                src={item.productModel.productImage}
+                                src={
+                                    item.productModel.productImage == null
+                                        ? ""
+                                        : item?.productModel.productImage
+                                }
                             ></ImageProduct>
                         </ContainerImage>
                         <InfoProduct>
                             <TitleProduct>
                                 <ProductName>
                                     <LinkDetail href={"/product/" + item.id}>
-                                        {item.modelName}
+                                        {item?.modelName}
                                     </LinkDetail>
                                 </ProductName>
                                 <ProductPrice>
-                                    {item.productModel.salePrice.toLocaleString("de-DE")}đ
+                                    {item?.productModel.salePrice.toLocaleString(
+                                        "de-DE"
+                                    )}
+                                    đ
                                 </ProductPrice>
                             </TitleProduct>
                             <Behavior>

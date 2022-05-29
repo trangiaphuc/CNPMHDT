@@ -1,14 +1,26 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SearchIcon from "@mui/icons-material/Search";
 import ImportantDevicesIcon from "@mui/icons-material/ImportantDevices";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Badge from "@mui/material/Badge";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/apiRequest";
 
-const Navbar = ({cart}) => {
+const Navbar = () => {
     // const [cart, setCart] = useState(1);
+    const user = useSelector((state) => state.auth.login.currentUser);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        logout(dispatch, navigate);
+    };
     return (
         <Container>
             <Wrapper>
@@ -28,19 +40,59 @@ const Navbar = ({cart}) => {
                     </SearchProduct>
                 </Left>
                 <Right>
-                    <Auth>
-                        <MenuItem href="/login">ĐĂNG NHẬP</MenuItem>
-                        <MenuItem href="/register">ĐĂNG KÝ</MenuItem>
-                    </Auth>
-                    <Cart>
-                        <ThemeProvider theme={theme}>
-                            <LinkCart href="/cart">
-                                <Badge1 color="primary" badgeContent={cart}>
-                                    <ShoppingCartIcon />
-                                </Badge1>
-                            </LinkCart>
-                        </ThemeProvider>
-                    </Cart>
+                    {user ? (
+                        <>
+                            <ProfileContainer>
+                                <IconWrap>
+                                    <NameUser>Nguyen Tu</NameUser>
+                                    <ArrowDropDownIcon />
+                                </IconWrap>
+                                <ProfileDD>
+                                    <ProfileUl>
+                                        <LinkTo href="/">
+                                            <ProfileLi>
+                                                <AccountBoxIcon />
+                                                <Profile>Profile</Profile>
+                                            </ProfileLi>
+                                        </LinkTo>
+                                        <LinkTo href="/">
+                                            <ProfileLi>
+                                                <ShoppingCartIcon />
+                                                <CartUser>Cart</CartUser>
+                                            </ProfileLi>
+                                        </LinkTo>
+                                        <LinkTo href="/">
+                                            <ProfileLi>
+                                                <LogoutIcon />
+                                                <LogOutUser
+                                                    onClick={handleLogout}
+                                                >
+                                                    Logout
+                                                </LogOutUser>
+                                            </ProfileLi>
+                                        </LinkTo>
+                                    </ProfileUl>
+                                </ProfileDD>
+                            </ProfileContainer>
+                            <Cart>
+                                <ThemeProvider theme={theme}>
+                                    <LinkCart href="/cart">
+                                        <Badge1
+                                            color="primary"
+                                            badgeContent="0"
+                                        >
+                                            <ShoppingCartIcon />
+                                        </Badge1>
+                                    </LinkCart>
+                                </ThemeProvider>
+                            </Cart>
+                        </>
+                    ) : (
+                        <Auth>
+                            <MenuItem href="/login">ĐĂNG NHẬP</MenuItem>
+                            <MenuItem href="/register">ĐĂNG KÝ</MenuItem>
+                        </Auth>
+                    )}
                 </Right>
             </Wrapper>
         </Container>
@@ -49,6 +101,67 @@ const Navbar = ({cart}) => {
 
 export default Navbar;
 
+const ProfileDD = styled.div`
+    position: absolute;
+    background-color: #e8ebef;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.25s linear;
+`;
+const ProfileContainer = styled.div`
+    position: relative;
+    margin-right: 0;
+    &:hover {
+        ${ProfileDD} {
+            opacity: 1;
+        }
+    }
+`;
+
+const IconWrap = styled.div`
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+`;
+const NameUser = styled.span`
+    box-sizing: border-box;
+    font-size: 18px;
+    font-weight: 600;
+`;
+
+const ProfileUl = styled.ul`
+    list-style: none;
+    box-sizing: border-box;
+    padding: 0;
+`;
+const ProfileLi = styled.li`
+    font-size: 18px;
+    display: flex;
+    padding: 10px;
+`;
+const Profile = styled.span`
+    box-sizing: border-box;
+    margin-left: 10px;
+`;
+const CartUser = styled.span`
+    box-sizing: border-box;
+    margin-left: 10px;
+`;
+const LogOutUser = styled.span`
+    box-sizing: border-box;
+    margin-left: 10px;
+`;
+const LinkTo = styled.a`
+    box-sizing: border-box;
+    height: fit-content;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    &:hover {
+        color: #ff3008;
+    }
+`;
 const Badge1 = styled(Badge)``;
 
 const LinkCart = styled.a`
@@ -137,4 +250,5 @@ const Auth = styled.div`
 `;
 const Cart = styled.div`
     color: white;
+    margin-right: 20px;
 `;

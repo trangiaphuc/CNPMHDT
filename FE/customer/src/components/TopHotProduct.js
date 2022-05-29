@@ -1,7 +1,7 @@
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { HotProduct } from "../data";
 
@@ -40,7 +40,7 @@ const TopHotProduct = () => {
                 </ArrowSlider>
             </Content>
             <ContainerSlider>
-                {HotProduct.map((item, idx) => (
+                {HotProduct?.map((item, idx) => (
                     <CardProduct tran={itemtrans.at(idx)} key={idx}>
                         <ContainerImage>
                             <ImageProduct src={item.image}></ImageProduct>
