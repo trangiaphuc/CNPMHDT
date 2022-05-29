@@ -7,20 +7,30 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/apiRequest";
+import { getTotals } from "../redux/cartSlice";
 
 const Navbar = () => {
     // const [cart, setCart] = useState(1);
     const user = useSelector((state) => state.auth.login.currentUser);
+    const cart = useSelector((state) => state.cart);
+    const { cartTotalQuantity } = useSelector((state) => state.cart);
+
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
         logout(dispatch, navigate);
     };
+
+    useEffect(() => {
+        dispatch(getTotals());
+    }, [cart, dispatch]);
+    
     return (
         <Container>
             <Wrapper>
@@ -79,7 +89,7 @@ const Navbar = () => {
                                     <LinkCart href="/cart">
                                         <Badge1
                                             color="primary"
-                                            badgeContent="0"
+                                            badgeContent={cartTotalQuantity}
                                         >
                                             <ShoppingCartIcon />
                                         </Badge1>

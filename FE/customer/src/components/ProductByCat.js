@@ -3,11 +3,19 @@ import styled from "styled-components";
 import axios from "axios";
 
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../redux/cartSlice";
 
 const ProductByCat = () => {
     const [brandList, setBrandList] = useState([]);
     const [model, setModel] = useState([]);
     const [product, setProduct] = useState([]);
+
+    const user = useSelector((state) => state.auth.login.currentUser);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const test = async () => {
@@ -35,6 +43,10 @@ const ProductByCat = () => {
         };
         test();
     }, []);
+
+    const handleAddToCart = (product) => {
+        user == null ? navigate("/login") : dispatch(addToCart(product));
+    };
     console.log(model);
     return (
         <Container>
@@ -83,7 +95,11 @@ const ProductByCat = () => {
                             </TitleProduct>
                             <Behavior>
                                 <BuyProduct>Mua</BuyProduct>
-                                <AddCart>
+                                <AddCart
+                                    onClick={() =>
+                                        handleAddToCart(item?.productModel)
+                                    }
+                                >
                                     <AddShoppingCartIcon />
                                 </AddCart>
                             </Behavior>

@@ -1,9 +1,196 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
+import { getTotals, removeFromCart } from "../redux/cartSlice";
 
+const Cart = () => {
+    const cart = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
+    console.log(cart);
+
+    useEffect(() => {
+        dispatch(getTotals());
+    }, [cart, dispatch]);
+    const handleRemoveFromCart = (cartItem) => {
+        dispatch(removeFromCart(cartItem));
+    };
+    return (
+        <div>
+            <Navbar />
+            <Categories />
+            <Container>
+                <Wrapper>
+                    <CartArea>
+                        <BranchName>
+                            Giỏ hàng mua tại
+                            <LocationBranch> Hồ Chí Minh</LocationBranch>
+                        </BranchName>
+                        <CartContainer>
+                            <CartProduct>
+                                <CartHeader>
+                                    <CartTitle>Sản Phẩm</CartTitle>
+                                    <CartPriceTitle>Đơn Giá</CartPriceTitle>
+                                    <CartQuantityTitle>
+                                        Số Lượng
+                                    </CartQuantityTitle>
+                                    <CartSumPriceTitle>
+                                        Thành Tiền
+                                    </CartSumPriceTitle>
+                                    <CartActionTitle>Thao Tác</CartActionTitle>
+                                </CartHeader>
+                                <CartBody>
+                                    <CartProductList>
+                                        {cart.cartItem.map((item, i) => (
+                                            <CartProductItem
+                                                key={item.id}
+                                                index={
+                                                    i % 2 === 0 ? "chan" : "le"
+                                                }
+                                            >
+                                                <CartInfo>
+                                                    <CartProductImage>
+                                                        <LinkDetail>
+                                                            <ProductImage
+                                                                img={
+                                                                    item.productImage
+                                                                }
+                                                            ></ProductImage>
+                                                        </LinkDetail>
+                                                    </CartProductImage>
+                                                    <ProductInfo>
+                                                        <ProductName>
+                                                            {item.productName}
+                                                        </ProductName>
+                                                        <ProductPrice>
+                                                            <Price>
+                                                                {item.salePrice.toLocaleString(
+                                                                    "de-DE"
+                                                                )}
+                                                                đ
+                                                            </Price>
+                                                        </ProductPrice>
+                                                        <ProductQuantity>
+                                                            <Quantity>
+                                                                {
+                                                                    item.cartQuantity
+                                                                }
+                                                            </Quantity>
+                                                        </ProductQuantity>
+                                                        <ProductRealPrice>
+                                                            <RealPrice>
+                                                                {item.salePrice.toLocaleString(
+                                                                    "de-DE"
+                                                                )}
+                                                                đ
+                                                            </RealPrice>
+                                                        </ProductRealPrice>
+                                                    </ProductInfo>
+                                                </CartInfo>
+                                                <CartAction>
+                                                    <CartDelete
+                                                        onClick={() =>
+                                                            handleRemoveFromCart(
+                                                                item
+                                                            )
+                                                        }
+                                                    >
+                                                        Xoá
+                                                    </CartDelete>
+                                                </CartAction>
+                                            </CartProductItem>
+                                        ))}
+                                        {/* <CartProductItem index="chan">
+                                            <CartInfo>
+                                                <CartProductImage>
+                                                    <LinkDetail>
+                                                        <ProductImage></ProductImage>
+                                                    </LinkDetail>
+                                                </CartProductImage>
+                                                <ProductInfo>
+                                                    <ProductName>
+                                                        Iphone 13 promax
+                                                    </ProductName>
+                                                    <ProductPrice>
+                                                        <Price>
+                                                            29.990.000đ
+                                                        </Price>
+                                                    </ProductPrice>
+                                                    <ProductQuantity>
+                                                        <Quantity>1</Quantity>
+                                                    </ProductQuantity>
+                                                    <ProductRealPrice>
+                                                        <RealPrice>
+                                                            29.990.000đ
+                                                        </RealPrice>
+                                                    </ProductRealPrice>
+                                                </ProductInfo>
+                                            </CartInfo>
+                                            <CartAction>
+                                                <CartDelete>Xoá</CartDelete>
+                                            </CartAction>
+                                        </CartProductItem>
+
+                                        <CartProductItem index="le">
+                                            <CartInfo>
+                                                <CartProductImage>
+                                                    <LinkDetail>
+                                                        <ProductImage></ProductImage>
+                                                    </LinkDetail>
+                                                </CartProductImage>
+                                                <ProductInfo>
+                                                    <ProductName>
+                                                        Iphone 13 promax
+                                                    </ProductName>
+                                                    <ProductPrice>
+                                                        <Price>
+                                                            29.990.000đ
+                                                        </Price>
+                                                    </ProductPrice>
+                                                    <ProductQuantity>
+                                                        <Quantity>1</Quantity>
+                                                    </ProductQuantity>
+                                                    <ProductRealPrice>
+                                                        <RealPrice>
+                                                            29.990.000đ
+                                                        </RealPrice>
+                                                    </ProductRealPrice>
+                                                </ProductInfo>
+                                            </CartInfo>
+                                            <CartAction>
+                                                <CartDelete>Xoá</CartDelete>
+                                            </CartAction>
+                                        </CartProductItem> */}
+                                    </CartProductList>
+                                </CartBody>
+                            </CartProduct>
+                            <CartFooter>
+                                <TextFooter>
+                                    Tổng tiền hàng:
+                                    <TotalPrice>
+                                        {cart.cartTotalAmount.toLocaleString(
+                                            "de-DE"
+                                        )}
+                                        đ
+                                    </TotalPrice>
+                                </TextFooter>
+                                <BuyFooter>
+                                    <ProductBuy href="/buy">
+                                        Tiếp tục
+                                    </ProductBuy>
+                                </BuyFooter>
+                            </CartFooter>
+                        </CartContainer>
+                    </CartArea>
+                </Wrapper>
+            </Container>
+        </div>
+    );
+};
+
+export default Cart;
 const Container = styled.div`
     width: 1350px;
     margin: auto;
@@ -84,7 +271,8 @@ const ProductInfo = styled.div`
 const ProductImage = styled.div`
     width: 100px;
     height: 100px;
-    background-image: url("https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg");
+    /* background-image: url("https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg"); */
+    background-image: url(${(props) => props.img});
     object-fit: cover;
     background-position: center;
     background-size: contain;
@@ -93,6 +281,9 @@ const ProductImage = styled.div`
 const ProductName = styled.div`
     box-sizing: border-box;
     width: 424px;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 20px;
 `;
 const ProductPrice = styled.div`
     box-sizing: border-box;
@@ -142,6 +333,9 @@ const TotalPrice = styled.span`
     outline: none;
     box-sizing: border-box;
     text-align: right;
+    margin-left: 20px;
+    color: #FF3008;
+    font-weight: 600;
 `;
 const BuyFooter = styled.div`
     width: 20%;
@@ -156,116 +350,6 @@ const ProductBuy = styled.a`
     box-sizing: border-box;
     padding: 15px 60px;
     border-radius: 6px;
-    background: linear-gradient(180deg, #FF3008 0%, #9C1C0B 100%);
+    background: linear-gradient(180deg, #ff3008 0%, #9c1c0b 100%);
     border-radius: 15px;
 `;
-
-const Cart = () => {
-    return (
-        <div>
-            <Navbar />
-            <Categories />
-            <Container>
-                <Wrapper>
-                    <CartArea>
-                        <BranchName>
-                            Giỏ hàng mua tại
-                            <LocationBranch> Hồ Chí Minh</LocationBranch>
-                        </BranchName>
-                        <CartContainer>
-                            <CartProduct>
-                                <CartHeader>
-                                    <CartTitle>Sản Phẩm</CartTitle>
-                                    <CartPriceTitle>Đơn Giá</CartPriceTitle>
-                                    <CartQuantityTitle>
-                                        Số Lượng
-                                    </CartQuantityTitle>
-                                    <CartSumPriceTitle>
-                                        Thành Tiền
-                                    </CartSumPriceTitle>
-                                    <CartActionTitle>Thao Tác</CartActionTitle>
-                                </CartHeader>
-                                <CartBody>
-                                    <CartProductList>
-                                        <CartProductItem index="chan">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-
-                                        <CartProductItem index="le">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-                                    </CartProductList>
-                                </CartBody>
-                            </CartProduct>
-                            <CartFooter>
-                                <TextFooter>
-                                    Tổng tiền hàng:
-                                    <TotalPrice> 29.990.000</TotalPrice>
-                                </TextFooter>
-                                <BuyFooter>
-                                    <ProductBuy href="/buy">Tiếp tục</ProductBuy>
-                                </BuyFooter>
-                            </CartFooter>
-                        </CartContainer>
-                    </CartArea>
-                </Wrapper>
-            </Container>
-        </div>
-    );
-};
-
-export default Cart;

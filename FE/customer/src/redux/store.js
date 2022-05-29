@@ -11,6 +11,7 @@ import {
     REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import cartReducer, { getTotals } from "./cartSlice";
 
 const persistConfig = {
     key: "root",
@@ -18,7 +19,7 @@ const persistConfig = {
     storage,
 };
 
-const rootReducer = combineReducers({ auth: authReducer });
+const rootReducer = combineReducers({ auth: authReducer, cart: cartReducer });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -38,6 +39,9 @@ export const store = configureStore({
             },
         }),
 });
+
+store.dispatch(getTotals());
+
 export let persistor = persistStore(store);
 
 // export default configureStore({
