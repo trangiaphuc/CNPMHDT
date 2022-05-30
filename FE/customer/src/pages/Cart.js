@@ -102,67 +102,6 @@ const Cart = () => {
                                                 </CartAction>
                                             </CartProductItem>
                                         ))}
-                                        {/* <CartProductItem index="chan">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-
-                                        <CartProductItem index="le">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem> */}
                                     </CartProductList>
                                 </CartBody>
                             </CartProduct>

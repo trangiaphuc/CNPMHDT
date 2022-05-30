@@ -1,13 +1,80 @@
+import { listClasses } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
+import { addNewSaleOrder } from "../redux/apiRequestCart";
 
 const Buy = () => {
     const [getGood, setGetGood] = useState([]);
     const [methodPayment, setMethodPayment] = useState([]);
+    const [payMent, setPayment] = useState(1);
+    const [delivery, setDelivery] = useState(1);
+
+    const [provinceList, setProvinceList] = useState([]);
+    const [province, setProvince] = useState(89);
+
+    const [districtList, setDistrictList] = useState([]);
+    const [district, setDistrict] = useState(883);
+
+    const [wardList, setWardList] = useState([]);
+    const [ward, setWard] = useState(1);
+
+    const [note, setNote] = useState("");
+    const [address, setAddress] = useState("");
+
+    const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.auth.login.currentUser);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-province-list"
+                );
+                setProvinceList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/general/get-district-list-by-province",
+                    {
+                        provinceCode: province,
+                    }
+                );
+                setDistrictList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, [province]);
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/general/get-ward-list-by-district",
+                    {
+                        districtCode: district,
+                    }
+                );
+                setWardList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, [district]);
     useEffect(() => {
         const test = async () => {
             try {
@@ -21,6 +88,7 @@ const Buy = () => {
         };
         test();
     }, []);
+
     useEffect(() => {
         const test = async () => {
             try {
@@ -34,7 +102,107 @@ const Buy = () => {
         };
         test();
     }, []);
-    console.log(getGood);
+
+    const handleChangeProvince = (e) => {
+        setProvince(e.target.value);
+    };
+    const handleChangeDistrict = (e) => {
+        setDistrict(e.target.value);
+    };
+    const handleChangeWard = (e) => {
+        setWard(e.target.value);
+    };
+    console.log(provinceList);
+    const handleBuy = () => {
+        let provinceID = -1;
+        let districtID = -1;
+        let wardID = -1;
+
+        provinceList.map((item) => {
+            if (item.provinceCode == province) {
+                provinceID = item.id;
+            }
+        });
+        districtList.map((item) => {
+            if (item.districtCode == district) {
+                districtID = item.id;
+            }
+        });
+        wardList.map((item) => {
+            if (item.wardCode == ward) {
+                wardID = item.id;
+            }
+        });
+        let shipCost = 0;
+        if (delivery === 1) {
+            shipCost = 15000;
+        }
+        const totalMoneyCart = cart.cartTotalAmount + shipCost;
+        console.log(provinceID);
+        let ListOrder = [];
+        cart.cartItem.map((item) => {
+            const tmp = {
+                productId: item.id,
+                salePrice: item.salePrice,
+                VAT: 0,
+                salePriceInvoiceVAT: item.salePrice,
+                quantity: item.cartQuantity,
+                cartDetailId: 1,
+            };
+            ListOrder.push(tmp);
+        });
+        const saleOrder = {
+            userId: user.id,
+            provinceId: provinceID,
+            districtId: districtID,
+            wardId: wardID,
+            deliveryAddress: address,
+            payableTypeId: payMent,
+            deliveryTypeId: delivery,
+            note: note,
+            debt: cart.cartTotalAmount,
+            shippingCost: shipCost,
+            totalMoney: totalMoneyCart,
+            outputStoreId: null,
+            saleOrderDetailList: ListOrder,
+        };
+        // let saleOrder = {};
+        // if (delivery === 1) {
+        //     saleOrder = {
+        //         userId: user.id,
+        //         provinceId: provinceID,
+        //         districtId: districtID,
+        //         wardId: wardID,
+        //         deliveryAddress: address,
+        //         payableTypeId: payMent,
+        //         deliveryTypeId: delivery,
+        //         note: note,
+        //         debt: cart.cartTotalAmount,
+        //         shippingCost: shipCost,
+        //         totalMoney: totalMoneyCart,
+        //         outputStoreId: null,
+        //         saleOrderDetailList: ListOrder,
+        //     };
+        // } else {
+        //     saleOrder = {
+        //         userId: user.id,
+        //         provinceId: null,
+        //         districtId: null,
+        //         wardId: null,
+        //         deliveryAddress: null,
+        //         payableTypeId: payMent,
+        //         deliveryTypeId: delivery,
+        //         note: note,
+        //         debt: cart.cartTotalAmount,
+        //         shippingCost: 0,
+        //         totalMoney: cart.cartTotalAmount,
+        //         outputStoreId: null,
+        //         saleOrderDetailList: ListOrder,
+        //     };
+        // }
+        addNewSaleOrder(saleOrder);
+        console.log(saleOrder);
+    };
     return (
         <div>
             <Navbar />
@@ -61,67 +229,57 @@ const Buy = () => {
                                 </CartHeader>
                                 <CartBody>
                                     <CartProductList>
-                                        <CartProductItem index="chan">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
-
-                                        <CartProductItem index="le">
-                                            <CartInfo>
-                                                <CartProductImage>
-                                                    <LinkDetail>
-                                                        <ProductImage></ProductImage>
-                                                    </LinkDetail>
-                                                </CartProductImage>
-                                                <ProductInfo>
-                                                    <ProductName>
-                                                        Iphone 13 promax
-                                                    </ProductName>
-                                                    <ProductPrice>
-                                                        <Price>
-                                                            29.990.000đ
-                                                        </Price>
-                                                    </ProductPrice>
-                                                    <ProductQuantity>
-                                                        <Quantity>1</Quantity>
-                                                    </ProductQuantity>
-                                                    <ProductRealPrice>
-                                                        <RealPrice>
-                                                            29.990.000đ
-                                                        </RealPrice>
-                                                    </ProductRealPrice>
-                                                </ProductInfo>
-                                            </CartInfo>
-                                            <CartAction>
-                                                <CartDelete>Xoá</CartDelete>
-                                            </CartAction>
-                                        </CartProductItem>
+                                        {cart.cartItem.map((item, i) => (
+                                            <CartProductItem
+                                                key={item.id}
+                                                index={
+                                                    i % 2 === 0 ? "chan" : "le"
+                                                }
+                                            >
+                                                <CartInfo>
+                                                    <CartProductImage>
+                                                        <LinkDetail>
+                                                            <ProductImage
+                                                                img={
+                                                                    item.productImage
+                                                                }
+                                                            ></ProductImage>
+                                                        </LinkDetail>
+                                                    </CartProductImage>
+                                                    <ProductInfo>
+                                                        <ProductName>
+                                                            {item.productName}
+                                                        </ProductName>
+                                                        <ProductPrice>
+                                                            <Price>
+                                                                {item.salePrice.toLocaleString(
+                                                                    "de-DE"
+                                                                )}
+                                                                đ
+                                                            </Price>
+                                                        </ProductPrice>
+                                                        <ProductQuantity>
+                                                            <Quantity>
+                                                                {
+                                                                    item.cartQuantity
+                                                                }
+                                                            </Quantity>
+                                                        </ProductQuantity>
+                                                        <ProductRealPrice>
+                                                            <RealPrice>
+                                                                {item.salePrice.toLocaleString(
+                                                                    "de-DE"
+                                                                )}
+                                                                đ
+                                                            </RealPrice>
+                                                        </ProductRealPrice>
+                                                    </ProductInfo>
+                                                </CartInfo>
+                                                <CartAction>
+                                                    <CartDelete></CartDelete>
+                                                </CartAction>
+                                            </CartProductItem>
+                                        ))}
                                     </CartProductList>
                                 </CartBody>
                             </CartProduct>
@@ -129,38 +287,26 @@ const Buy = () => {
                     </CartArea>
 
                     <InfoCheckOut>
-                        <FormCheckOut>
+                        <FormCheckOut onSubmit={handleBuy}>
                             <ChooseGetGoods>
                                 <GetGoodTitle>Cách thức nhận hàng</GetGoodTitle>
                                 {getGood.map((item, i, a) => {
-                                    if (i === 0) {
-                                        return (
-                                            <GetGoodsItem>
-                                                <RadioGetGoods
-                                                    type="radio"
-                                                    name="choose_get_good"
-                                                    value={i}
-                                                    checked="checked"
-                                                ></RadioGetGoods>
-                                                <LabelGetGoods>
-                                                    {item.deliveryType}
-                                                </LabelGetGoods>
-                                            </GetGoodsItem>
-                                        );
-                                    } else {
-                                        return (
-                                            <GetGoodsItem>
-                                                <RadioGetGoods
-                                                    type="radio"
-                                                    name="choose_get_good"
-                                                    value={i}
-                                                ></RadioGetGoods>
-                                                <LabelGetGoods>
-                                                    {item.deliveryType}
-                                                </LabelGetGoods>
-                                            </GetGoodsItem>
-                                        );
-                                    }
+                                    return (
+                                        <GetGoodsItem key={item.id}>
+                                            <RadioGetGoods
+                                                type="radio"
+                                                name="choose_get_good"
+                                                value={i}
+                                                onChange={() =>
+                                                    setDelivery(item.id)
+                                                }
+                                                checked={delivery === item.id}
+                                            ></RadioGetGoods>
+                                            <LabelGetGoods>
+                                                {item.deliveryType}
+                                            </LabelGetGoods>
+                                        </GetGoodsItem>
+                                    );
                                 })}
                             </ChooseGetGoods>
                             <MethodPayment>
@@ -168,42 +314,149 @@ const Buy = () => {
                                     Phương thức thanh toán
                                 </MethodPaymentTitle>
                                 {methodPayment.map((item, i, a) => {
-                                    if (i === 0) {
-                                        return (
-                                            <MethodPaymentItem>
-                                                <RadioPayment
-                                                    type="radio"
-                                                    name="choose_payment"
-                                                    value={i}
-                                                    checked="checked"
-                                                ></RadioPayment>
-                                                <LabelPayment>
-                                                    {item.payableTypeName}
-                                                </LabelPayment>
-                                            </MethodPaymentItem>
-                                        );
-                                    } else {
-                                        return (
-                                            <MethodPaymentItem>
-                                                <RadioPayment
-                                                    type="radio"
-                                                    name="choose_payment"
-                                                    value={i}
-                                                ></RadioPayment>
-                                                <LabelPayment>
-                                                    {item.payableTypeName}
-                                                </LabelPayment>
-                                            </MethodPaymentItem>
-                                        );
-                                    }
+                                    return (
+                                        <MethodPaymentItem key={item.id}>
+                                            <RadioPayment
+                                                type="radio"
+                                                name="choose_payment"
+                                                value={i}
+                                                onChange={() =>
+                                                    setPayment(item.id)
+                                                }
+                                                checked={payMent === item.id}
+                                            ></RadioPayment>
+                                            <LabelPayment>
+                                                {item.payableTypeName}
+                                            </LabelPayment>
+                                        </MethodPaymentItem>
+                                    );
                                 })}
                             </MethodPayment>
+                            {delivery === 1 ? (
+                                <InformationReceivedContainer>
+                                    <InformationTitle>
+                                        Thông tin nhận hàng
+                                    </InformationTitle>
+                                    <InformationReceived>
+                                        <InformationRow>
+                                            <NameReceived>
+                                                <LabelName for="name">
+                                                    Tên Người Nhận
+                                                </LabelName>
+                                                <InputName id="name"></InputName>
+                                            </NameReceived>
+                                            <PhoneReceived>
+                                                <LabelPhone for="phone">
+                                                    Số Điện Thoại
+                                                </LabelPhone>
+                                                <InputPhone id="phone"></InputPhone>
+                                            </PhoneReceived>
+                                            <EmailReceived>
+                                                <LabelEmail for="address">
+                                                    Địa chỉ người nhận
+                                                </LabelEmail>
+                                                <InputEmail
+                                                    id="address"
+                                                    onChange={(e) =>
+                                                        setAddress(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                ></InputEmail>
+                                            </EmailReceived>
+                                        </InformationRow>
+                                        <InformationRow>
+                                            <ChooseProvince>
+                                                <LabelProvince>
+                                                    Chọn tỉnh thành
+                                                </LabelProvince>
+                                                <SelectProvince
+                                                    id="provinceSelect"
+                                                    value={province}
+                                                    onChange={
+                                                        handleChangeProvince
+                                                    }
+                                                >
+                                                    {provinceList?.map(
+                                                        (item) => (
+                                                            <OptionProvince
+                                                                key={item.id}
+                                                                value={
+                                                                    item.provinceCode
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.provinceName
+                                                                }
+                                                            </OptionProvince>
+                                                        )
+                                                    )}
+                                                </SelectProvince>
+                                            </ChooseProvince>
+
+                                            <ChooseDistrict>
+                                                <LabelDistrict>
+                                                    Chọn quận huyện
+                                                </LabelDistrict>
+                                                <SelectDistrict
+                                                    id="districtSelect"
+                                                    value={district}
+                                                    onChange={
+                                                        handleChangeDistrict
+                                                    }
+                                                >
+                                                    {districtList?.map(
+                                                        (item) => (
+                                                            <OptionDistrict
+                                                                key={item.id}
+                                                                value={
+                                                                    item.districtCode
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.districtName
+                                                                }
+                                                            </OptionDistrict>
+                                                        )
+                                                    )}
+                                                </SelectDistrict>
+                                            </ChooseDistrict>
+
+                                            <ChooseWard>
+                                                <LabelWard>
+                                                    Chọn phường xã
+                                                </LabelWard>
+                                                <SelectWard
+                                                    id="wardSelect"
+                                                    value={ward}
+                                                    onChange={handleChangeWard}
+                                                >
+                                                    {wardList?.map((item) => (
+                                                        <OptionWard
+                                                            key={item.id}
+                                                            value={
+                                                                item.wardCode
+                                                            }
+                                                        >
+                                                            {item.wardName}
+                                                        </OptionWard>
+                                                    ))}
+                                                </SelectWard>
+                                            </ChooseWard>
+                                        </InformationRow>
+                                    </InformationReceived>
+                                </InformationReceivedContainer>
+                            ) : (
+                                <></>
+                            )}
+
                             <InfoCheckout>
                                 <NoteCheckout>Ghi chú:</NoteCheckout>
                                 <TextAreaNote
                                     name="note"
                                     rows="7"
                                     placeholder="Nhập ghi chú..."
+                                    onChange={(e) => setNote(e.target.value)}
                                 ></TextAreaNote>
 
                                 <Info>
@@ -212,16 +465,35 @@ const Buy = () => {
                                             Tổng tiền sản phẩm
                                         </TotalTitleProduct>
                                         <TotalPriceProduct>
-                                            29.990.000
+                                            {cart.cartTotalAmount.toLocaleString(
+                                                "de-DE"
+                                            )}
                                         </TotalPriceProduct>
                                     </TotalPrice>
+                                    {delivery === 1 ? (
+                                        <ShipPrice>
+                                            <TotalTitleProduct>
+                                                Phí Ship
+                                            </TotalTitleProduct>
+                                            <TotalPriceProduct>
+                                                15.000đ
+                                            </TotalPriceProduct>
+                                        </ShipPrice>
+                                    ) : (
+                                        <></>
+                                    )}
+
                                     <TotalCheckout>
                                         <TotalTitle>Tổng Thanh toán</TotalTitle>
                                         <TotalPricePay>
-                                            29.990.000
+                                            {(
+                                                cart.cartTotalAmount +
+                                                (delivery % 2) * 15000
+                                            ).toLocaleString("de-DE")}
                                         </TotalPricePay>
                                     </TotalCheckout>
                                     <Order>Đặt hàng</Order>
+                                    <h1 onClick={handleBuy}>sdf</h1>
                                 </Info>
                             </InfoCheckout>
                         </FormCheckOut>
@@ -231,6 +503,124 @@ const Buy = () => {
         </div>
     );
 };
+
+const SelectProvince = styled.select`
+    font-size: 18px;
+    padding: 2px 5px;
+    &:focus {
+        outline: none;
+    }
+    width: 80%;
+`;
+const OptionProvince = styled.option``;
+const SelectDistrict = styled.select`
+    font-size: 18px;
+    padding: 2px 5px;
+    &:focus {
+        outline: none;
+    }
+    width: 80%;
+`;
+const OptionDistrict = styled.option``;
+const SelectWard = styled.select`
+    font-size: 18px;
+    padding: 2px 5px;
+    &:focus {
+        outline: none;
+    }
+    width: 80%;
+`;
+const OptionWard = styled.option``;
+
+const ChooseProvince = styled.div`
+    flex: 1;
+`;
+const ChooseDistrict = styled.div`
+    flex: 1;
+`;
+const ChooseWard = styled.div`
+    flex: 1;
+`;
+const LabelProvince = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+const LabelDistrict = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+const LabelWard = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+
+const InformationReceivedContainer = styled.div`
+    background-color: #e8ebef;
+    padding: 30px 50px;
+`;
+const InformationTitle = styled.p`
+    font-size: 22px;
+    font-weight: 500;
+`;
+const InformationReceived = styled.div`
+    margin-top: 20px;
+`;
+const InformationRow = styled.div`
+    display: flex;
+    padding: 15px 0px;
+`;
+const NameReceived = styled.div`
+    flex: 1;
+`;
+const LabelName = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+const InputName = styled.input`
+    width: 80%;
+    font-size: 18px;
+    padding: 5px 5px;
+    &:focus {
+        outline: none;
+    }
+`;
+const EmailReceived = styled.div`
+    flex: 1;
+`;
+const LabelEmail = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+const InputEmail = styled.input`
+    width: 80%;
+    font-size: 18px;
+    padding: 5px 5px;
+    &:focus {
+        outline: none;
+    }
+`;
+const PhoneReceived = styled.div`
+    flex: 1;
+`;
+const LabelPhone = styled.label`
+    display: block;
+    padding: 10px 0px;
+    font-size: 18px;
+`;
+const InputPhone = styled.input`
+    width: 80%;
+    font-size: 18px;
+    padding: 5px 5px;
+    &:focus {
+        outline: none;
+    }
+`;
+
 const Container = styled.div`
     width: 1350px;
     margin: auto;
@@ -311,7 +701,7 @@ const ProductInfo = styled.div`
 const ProductImage = styled.div`
     width: 100px;
     height: 100px;
-    background-image: url("https://cdn.mobilecity.vn/mobilecity-vn/images/2022/03/iphone-12-chinh-hang-blue.jpg");
+    background-image: url(${(props) => props.img});
     object-fit: cover;
     background-position: center;
     background-size: contain;
@@ -424,7 +814,7 @@ const TextAreaNote = styled.textarea`
     width: 50%;
     display: block;
     font-size: 20px;
-    padding: 5px 20px;
+    padding: 10px 20px;
     border: none;
     resize: vertical;
     background-color: #e8ebef;
@@ -442,8 +832,13 @@ const Info = styled.div`
 const TotalPrice = styled.div`
     display: block;
     padding-bottom: 15px;
+`;
+const ShipPrice = styled.div`
+    display: block;
+    padding-bottom: 15px;
     border-bottom: 1px solid #d1d6de;
 `;
+
 const TotalTitleProduct = styled.span`
     box-sizing: border-box;
 `;
