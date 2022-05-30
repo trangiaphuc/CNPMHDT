@@ -31,7 +31,7 @@ module.exports = {
             },
             {
                 brandName: "Huawei",
-                isDelete: false,
+                isDelete: true,
                 userCreate: "administrator",
                 userUpdate: "administrator",
                 userDelete: "administrator",
@@ -40,7 +40,7 @@ module.exports = {
             },
             {
                 brandName: "Nokia",
-                isDelete: false,
+                isDelete: true,
                 userCreate: "administrator",
                 userUpdate: "administrator",
                 userDelete: "administrator",
@@ -49,7 +49,7 @@ module.exports = {
             },
             {
                 brandName: "Realme",
-                isDelete: false,
+                isDelete: true,
                 userCreate: "administrator",
                 userUpdate: "administrator",
                 userDelete: "administrator",
@@ -67,6 +67,15 @@ module.exports = {
             },
             {
                 brandName: "VSmart",
+                isDelete: true,
+                userCreate: "administrator",
+                userUpdate: "administrator",
+                userDelete: "administrator",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                brandName: "Nubia",
                 isDelete: false,
                 userCreate: "administrator",
                 userUpdate: "administrator",

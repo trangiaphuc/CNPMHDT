@@ -17,6 +17,26 @@ module.exports = {
                 modelProductId: 7,
                 isDelete: false,
             },
+            {
+                modelName: "NUBIA REDMAGIC 7 12-256GB",
+                modelProductId: 15,
+                isDelete: false,
+            },
+            {
+                modelName: "Xiaomi Redmi K50 Gaming Mercedes AMG Edition",
+                modelProductId: 19,
+                isDelete: false,
+            },
+            {
+                modelName: "Asus ROG Phone 5",
+                modelProductId: 21,
+                isDelete: false,
+            },
+            {
+                modelName: "Samsung Galaxy Tab S7 FE (4G, Wifi)",
+                modelProductId: 23,
+                isDelete: false,
+            },
         ]);
     },
 
