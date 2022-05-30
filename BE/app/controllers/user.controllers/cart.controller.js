@@ -3,6 +3,7 @@ const Product = db.products;
 const Cart = db.carts;
 const CartDetail = db.cartDetails;
 const QuantityUnit = db.quantityUnits;
+const Image = db.images;
 const config = require("../../config/auth.config");
 const Op = db.Sequelize.Op;
 var jwt = require("jsonwebtoken");
@@ -15,8 +16,18 @@ exports.getCartDetails = (req, res) => {
     }).then((foundCart) => {
         CartDetail.findAll({
             where: { cartId: foundCart.id, isBuy: false },
-            include: [{ model: Product }],
+            include: [{ model: Product, include: [{ model: Image }] }],
         }).then((cartDetailList) => {
+            cartDetailList.forEach((cartDetail) => {
+                const product = cartDetail.product;
+                const productImage = product.image;
+                const image = fs.readFileSync(__basedir + productImage.imageUri);
+
+                var base64ProductImage =
+                    "data:image/png;base64," + Buffer.from(image).toString("base64");
+
+                product.setDataValue("productImage", base64ProductImage);
+            });
             foundCart.setDataValue("cartDetailList", cartDetailList);
             res.status(200).send({ result: foundCart });
         });
