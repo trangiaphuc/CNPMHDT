@@ -6,6 +6,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../redux/cartSlice";
+import { addCart } from "../redux/apiRequestCart";
 
 const ProductByCat = () => {
     const [brandList, setBrandList] = useState([]);
@@ -45,7 +46,8 @@ const ProductByCat = () => {
     }, []);
 
     const handleAddToCart = (product) => {
-        user == null ? navigate("/login") : dispatch(addToCart(product));
+        // user == null ? navigate("/login") : dispatch(addToCart(product));
+        user == null ? navigate("/login") : addCart(user, product, dispatch);
     };
     console.log(model);
     return (

@@ -14,16 +14,27 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        // const res = await axios.post("/login",user);
-        // dispatch(loginSuccess(res.data));
-        const user = {
-            username: "tu",
-            password: "123",
+        const userLogin = {
+            username: user.username,
+            email: "",
+            phone: "",
+            password: user.password,
         };
-        dispatch(loginSuccess(user));
+        const res = await axios.post(
+            "http://localhost:9000/general/auth/signin/",
+            {
+                username: user.username,
+                email: "-1",
+                phone: "-1",
+                password: user.password,
+            }
+        );
+
+        dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (error) {
-        dispatch(loginFailed());
+        // console.log(error.response.data.message);
+        alert(error.response.data.message);
     }
 };
 export const registerUser = async (user, dispatch, navigate) => {
@@ -40,7 +51,7 @@ export const registerUser = async (user, dispatch, navigate) => {
     }
 };
 
-export const logout =  (dispatch, navigate) => {
+export const logout = (dispatch, navigate) => {
     dispatch(logOutStart());
     try {
         // const res = await axios.post("/login",user);
@@ -51,4 +62,3 @@ export const logout =  (dispatch, navigate) => {
         dispatch(logOutFailed());
     }
 };
-

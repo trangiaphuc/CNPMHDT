@@ -30,7 +30,7 @@ const Navbar = () => {
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
-    
+
     return (
         <Container>
             <Wrapper>
@@ -116,13 +116,15 @@ const ProfileDD = styled.div`
     background-color: #e8ebef;
     z-index: 999;
     opacity: 0;
-    transition: opacity 0.25s linear;
+    visibility: hidden;
+    transition: visibility 0.25s, opacity 0.25s linear;
 `;
 const ProfileContainer = styled.div`
     position: relative;
     margin-right: 0;
     &:hover {
         ${ProfileDD} {
+            visibility: visible;
             opacity: 1;
         }
     }

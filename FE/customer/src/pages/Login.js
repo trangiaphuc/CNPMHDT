@@ -18,7 +18,11 @@ const Login = () => {
             username: username,
             password: password,
         };
-        loginUser(newUser, dispatch, navigate);
+        const log = loginUser(newUser, dispatch, navigate);
+        console.log(log)
+        // if (log.accessToken == null) {
+        //     alert(log.message);
+        // }
     };
     return (
         <div>
