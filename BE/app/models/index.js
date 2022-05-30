@@ -91,7 +91,10 @@ db.productInfors = require("../models/productinfo")(sequelize, Sequelize);
 db.productContents = require("../models/productcontent")(sequelize, Sequelize);
 db.carts = require("../models/carts")(sequelize, Sequelize);
 db.cartDetails = require("../models/cartdetails")(sequelize, Sequelize);
-
+db.currentInstockDetails = require("../models/currentinstockdetails")(
+    sequelize,
+    Sequelize
+);
 //ket bang
 db.provinces.hasOne(db.users);
 db.districts.hasOne(db.users);
@@ -125,6 +128,7 @@ db.currentInstocks.belongsTo(db.stores);
 db.currentInstocks.belongsTo(db.products);
 db.currentInstocks.belongsTo(db.inventoryStatuses);
 db.currentInstocks.belongsTo(db.brands);
+db.currentInstockDetails.belongsTo(db.currentInstocks);
 db.inputVoucherDetails.belongsTo(db.products);
 db.currentInstockDetails.belongsTo(db.inventoryStatuses);
 db.currentInstockDetails.belongsTo(db.stores);
