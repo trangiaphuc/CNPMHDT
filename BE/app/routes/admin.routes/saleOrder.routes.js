@@ -22,5 +22,12 @@ module.exports = function(app) {
         controller.shipSalesOrder
     );
 
+    app.get(
+        "/admin/sale-order-management/get-all-sale-order",
+        controller.getAllSaleOrders
+    );
+
+    app.post("/admin/sale-order-management/out-product", controller.outProduct);
+
     app.post("/admin/sale-order-management/ship-confirm", controller.shipConfirm);
 };

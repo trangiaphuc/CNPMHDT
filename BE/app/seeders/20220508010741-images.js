@@ -24,6 +24,30 @@ module.exports = {
             {
                 imageUri: "/resources/images/productImages/galaxy-s22-ultra-xanh.jpg",
             },
+            {
+                imageUri: "/resources/images/productImages/nubia-red-magic-7-pro.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/nubia-red-magic-7-pro.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/nubia-red-magic-7-pro-den.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/nubia-red-magic-7-pro-trong-suot.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/redmi-k50-gaming-mercedes-amg-edition.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/asus-rog-phone-5-black.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/samsung-galaxy-tab-s7-fe-den.jpg",
+            },
+            {
+                imageUri: "/resources/images/productImages/samsung-galaxy-tab-s7-fe-xanh.jpg",
+            },
         ]);
     },
 
