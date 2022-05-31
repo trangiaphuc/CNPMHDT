@@ -112,8 +112,8 @@ exports.getProductWithModel = (req, res) => {
                     });
                 }
 
-                // const currentInstockStore = await productCurrentInstocks.storeId;
-                // const currentInstockQuantity = productCurrentInstocks.quantity;
+                const currentInstockStore = await productCurrentInstocks.storeId;
+                const currentInstockQuantity = productCurrentInstocks.quantity;
 
                 // console.log({ bePhucDeThuong: productCurrentInstocks.dataValues });
 
@@ -147,14 +147,14 @@ exports.getProductWithModel = (req, res) => {
                     productCurrentInstocks
                 );
                 product.setDataValue("productAccessoryGroup", productAccessoryGroup);
-                // product.setDataValue(
-                //     "productCurrentInstockStoreId",
-                //     currentInstockStoreId
-                // );
-                // product.setDataValue(
-                //     "productCurrentInstockQuantity",
-                //     currentInstockQuantity
-                // );
+                product.setDataValue(
+                    "productCurrentInstockStoreId",
+                    currentInstockStore
+                );
+                product.setDataValue(
+                    "productCurrentInstockQuantity",
+                    currentInstockQuantity
+                );
                 product.setDataValue("productInfomation", productInfo);
                 product.setDataValue("productContent", productContentList);
 
