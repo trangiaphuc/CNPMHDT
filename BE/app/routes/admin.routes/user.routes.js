@@ -22,4 +22,12 @@ module.exports = function(app) {
         ],
         controller.findAllUsers
     );
+
+    app.get(
+        "/admin/users/get-all-shippers", [
+            // verifySignUp.checkDuplicateUsernameOrEmail,
+            // verifySignUp.checkRolesExisted
+        ],
+        controller.getAllShipper
+    );
 };

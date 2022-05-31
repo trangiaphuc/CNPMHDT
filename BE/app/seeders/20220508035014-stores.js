@@ -13,7 +13,7 @@ module.exports = {
          */
         return queryInterface.bulkInsert("stores", [{
                 // storeName: "Kho I",
-                storeName: "Kho I",
+                storeName: "Kho Hà Nội",
                 isDelete: false,
                 userCreate: "administrator",
                 provinceId: 1,
@@ -22,7 +22,7 @@ module.exports = {
             },
             {
                 // storeName: "Kho II",
-                storeName: "Kho II",
+                storeName: "Kho Thành phố Hồ Chí Minh",
                 isDelete: false,
                 userCreate: "administrator",
                 provinceId: 34,
@@ -31,7 +31,16 @@ module.exports = {
             },
             {
                 // storeName: "Kho III",
-                storeName: "Kho III",
+                storeName: "Kho Cần Thơ",
+                isDelete: false,
+                userCreate: "administrator",
+                provinceId: 23,
+                districtId: 45,
+                wardId: 15,
+            },
+            {
+                // storeName: "Kho III",
+                storeName: "Kho Bến Tre",
                 isDelete: false,
                 userCreate: "administrator",
                 provinceId: 23,
