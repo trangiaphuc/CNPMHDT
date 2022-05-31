@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../../midlleware");
+const authJWT = require("../../midlleware/authJwt");
 const controller = require("../../controllers/user.controllers/cart.controller");
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -13,6 +13,7 @@ module.exports = function(app) {
         "/user/add-to-cart", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJWT.verifyToken,
         ],
         controller.addToCart
     );
@@ -21,6 +22,7 @@ module.exports = function(app) {
         "/user/get-cart-by-user", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJWT.verifyToken,
         ],
         controller.getCartDetails
     );
@@ -29,6 +31,7 @@ module.exports = function(app) {
         "/user/edit-cart", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJWT.verifyToken,
         ],
         controller.editCartDetails
     );

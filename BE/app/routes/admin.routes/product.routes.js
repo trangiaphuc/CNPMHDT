@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../../midlleware");
+const authJwt = require("../../midlleware/authJwt");
 const controller = require("../../controllers/admin.controllers/product.controller");
 const express = require("express");
 const upload = require("../../midlleware/upload");
@@ -21,25 +21,25 @@ module.exports = function(app) {
     //Them moi san pham
     app.post(
         "/admin/product-management/add-new-product",
-        upload.single("file"),
+        upload.single("file"), [authJwt.verifyToken, authJwt.isAdmin],
         controller.addNewProduct
     );
 
     //lấy thông tin chi tiết sản phẩm bằng mã sản phẩm
     app.get(
-        "/admin/product-management/get-product/:productId",
+        "/admin/product-management/get-product/:productId", [authJwt.verifyToken, authJwt.isAdmin],
         controller.getOneProduct
     );
 
     //tìm kiếm fulltext sản phẩm
     app.post(
-        "/admin/product-management/search-product/",
+        "/admin/product-management/search-product/", [authJwt.verifyToken, authJwt.isAdmin],
         controller.searchProductWithKeyword
     );
 
     // tìm sản phẩm với các hãng sản xuất sản phẩm hoặc giá bán sản phẩm tối thiếu
     app.post(
-        "/admin/product-management/get-product-with-parameter",
+        "/admin/product-management/get-product-with-parameter", [authJwt.verifyToken, authJwt.isAdmin],
         controller.getProductWithParameters
     );
 };

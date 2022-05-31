@@ -1,4 +1,4 @@
-const { verifySignUp } = require("../../midlleware");
+const authJwt = require("../../midlleware/authJwt");
 const controller = require("../../controllers/general.controllers/saleOrder.controller");
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -13,6 +13,7 @@ module.exports = function(app) {
         "/general/get-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJwt.verifyToken,
         ],
         controller.getSalesOrderListByUserId
     );
@@ -21,6 +22,7 @@ module.exports = function(app) {
         "/general/edit-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJwt.verifyToken,
         ],
         controller.editSaleOrder
     );
@@ -29,12 +31,13 @@ module.exports = function(app) {
         "/general/add-new-saleorder", [
             // verifySignUp.checkDuplicateUsernameOrEmail,
             // verifySignUp.checkRolesExisted
+            authJwt.verifyToken,
         ],
         controller.addNewSaleOrder
     );
 
     app.post(
-        "/general/get-sale-order-detail", [],
+        "/general/get-sale-order-detail", [authJwt.verifyToken],
         controller.getSalesOrderDetailByUserId
     );
 };
