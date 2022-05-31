@@ -1,12 +1,14 @@
 import { listClasses } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
 import { addNewSaleOrder } from "../redux/apiRequestCart";
+import { emptyCart } from "../redux/cartSlice";
 
 const Buy = () => {
     const [getGood, setGetGood] = useState([]);
@@ -113,6 +115,8 @@ const Buy = () => {
         setWard(e.target.value);
     };
     console.log(provinceList);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleBuy = () => {
         let provinceID = -1;
         let districtID = -1;
@@ -200,7 +204,9 @@ const Buy = () => {
         //         saleOrderDetailList: ListOrder,
         //     };
         // }
-        addNewSaleOrder(saleOrder);
+        addNewSaleOrder(user, saleOrder);
+        dispatch(emptyCart());
+        navigate("/");
         console.log(saleOrder);
     };
     return (
@@ -493,7 +499,7 @@ const Buy = () => {
                                         </TotalPricePay>
                                     </TotalCheckout>
                                     <Order>Đặt hàng</Order>
-                                    <h1 onClick={handleBuy}>sdf</h1>
+                                    {/* <h1 onClick={handleBuy}>sdf</h1> */}
                                 </Info>
                             </InfoCheckout>
                         </FormCheckOut>

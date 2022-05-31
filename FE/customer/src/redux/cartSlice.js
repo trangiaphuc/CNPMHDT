@@ -4,6 +4,7 @@ const initialState = {
     cartItem: [],
     cartTotalQuantity: 0,
     cartTotalAmount: 0,
+    searchText: "",
 };
 
 const cartSlice = createSlice({
@@ -46,7 +47,16 @@ const cartSlice = createSlice({
             state.cartTotalQuantity = quantity;
             state.cartTotalAmount = total;
         },
+        searchProduct(state, action) {
+            state.searchText = action.payload;
+        },
+        emptyCart(state) {
+            state.cartItem = [];
+            state.cartTotalQuantity = 0;
+            state.artTotalAmount = 0;
+        },
     },
 });
-export const { addToCart, removeFromCart, getTotals } = cartSlice.actions;
+export const { addToCart, removeFromCart, getTotals, searchProduct ,emptyCart} =
+    cartSlice.actions;
 export default cartSlice.reducer;

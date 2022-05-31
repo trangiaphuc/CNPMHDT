@@ -9,6 +9,7 @@ import Categories from "./components/Categories";
 import Cart from "./pages/Cart";
 import { useState } from "react";
 import Buy from "./pages/Buy";
+import Search from "./pages/Search";
 function App() {
     // const [cart, setCart] = useState(0);
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route exact path="/product/:id" element={<Product />} />
                 <Route exact path="/cart" element={<Cart />} />
                 <Route exact path="/buy" element={<Buy />} />
+                <Route exact path="/search/:text" element={<Search />} />
             </Routes>
         </Router>
     );

@@ -12,7 +12,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/apiRequest";
-import { getTotals } from "../redux/cartSlice";
+import { getTotals, searchProduct } from "../redux/cartSlice";
 
 const Navbar = () => {
     // const [cart, setCart] = useState(1);
@@ -20,7 +20,8 @@ const Navbar = () => {
     const cart = useSelector((state) => state.cart);
     const { cartTotalQuantity } = useSelector((state) => state.cart);
 
-    
+    const [textSearch, setTextSearch] = useState("");
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -30,6 +31,16 @@ const Navbar = () => {
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
+
+    const handleSearch = () => {
+        if (textSearch === "") {
+            alert("Nhập từ khoá tìm kiếm")
+        }
+        else{
+            navigate("/search/" + textSearch)
+            dispatch(searchProduct(textSearch))
+        }
+    };
 
     return (
         <Container>
@@ -42,8 +53,13 @@ const Navbar = () => {
                             P&T
                         </Logo>
                     </LinkHome>
-                    <SearchProduct>
-                        <Input />
+                    <SearchProduct
+                        onSubmit={handleSearch}
+                        action={"/search/" + textSearch}
+                    >
+                        <Input
+                            onChange={(e) => setTextSearch(e.target.value)}
+                        />
                         <Button>
                             <SearchIcon />
                         </Button>
@@ -54,7 +70,7 @@ const Navbar = () => {
                         <>
                             <ProfileContainer>
                                 <IconWrap>
-                                    <NameUser>Nguyen Tu</NameUser>
+                                    <NameUser>{user.username}</NameUser>
                                     <ArrowDropDownIcon />
                                 </IconWrap>
                                 <ProfileDD>

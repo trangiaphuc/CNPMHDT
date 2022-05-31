@@ -60,18 +60,25 @@ const Categories = () => {
                             </LeftType>
                             <RightType>
                                 <TypeName>Mức giá</TypeName>
-
-                                {subProduct2.map((itemSub) => {
-                                    if (itemMain.id === itemSub.idMain) {
-                                        return (
-                                            <SubItem key={itemSub.id}>
-                                                <TextSubProduct href="#">
-                                                    {itemSub.name}
-                                                </TextSubProduct>
-                                            </SubItem>
-                                        );
-                                    }
-                                })}
+                                <SubItem>
+                                    <TextSubProduct href="#">Dưới 1 triệu</TextSubProduct>
+                                </SubItem>
+                                <SubItem>
+                                    <TextSubProduct href="#">Dưới 2 triệu</TextSubProduct>
+                                </SubItem>
+                                <SubItem>
+                                    <TextSubProduct href="#">Dưới 3 triệu</TextSubProduct>
+                                </SubItem>
+                                <SubItem>
+                                    <TextSubProduct href="#">Dưới 5 triệu</TextSubProduct>
+                                </SubItem>
+                                <SubItem>
+                                    <TextSubProduct href="#">Dưới 10 triệu</TextSubProduct>
+                                </SubItem>
+                                <SubItem>
+                                    <TextSubProduct href="#">Trên 10 triệu</TextSubProduct>
+                                </SubItem>
+                                
                             </RightType>
                         </ListSub>
                     </MainItem>

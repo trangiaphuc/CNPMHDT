@@ -81,7 +81,10 @@ const Cart = () => {
                                                         </ProductQuantity>
                                                         <ProductRealPrice>
                                                             <RealPrice>
-                                                                {item.salePrice.toLocaleString(
+                                                                {(
+                                                                    item.salePrice *
+                                                                    item.cartQuantity
+                                                                ).toLocaleString(
                                                                     "de-DE"
                                                                 )}
                                                                 đ
@@ -273,7 +276,7 @@ const TotalPrice = styled.span`
     box-sizing: border-box;
     text-align: right;
     margin-left: 20px;
-    color: #FF3008;
+    color: #ff3008;
     font-weight: 600;
 `;
 const BuyFooter = styled.div`

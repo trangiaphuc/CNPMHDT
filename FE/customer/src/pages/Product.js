@@ -32,23 +32,8 @@ const Product = () => {
         };
         test();
     }, [modelId]);
-    // useEffect(() => {
-    //     const test = async () => {
-    //         try {
-    //             const res = await axios.post(
-    //                 "http://localhost:9000/user/get-all-product-by-model",
-    //                 {
-    //                     modelId,
-    //                     storeId,
-    //                 }
-    //             );
-    //             setProductList(res.data.productList);
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     };
-    //     test();
-    // }, []);
+    const productDetail = productList[0];
+    console.log(productDetail);
     function handleChangeColor(proId) {
         productList.map((item, i) => {
             if (item.id === proId) {
@@ -129,19 +114,20 @@ const Product = () => {
                                 Thông tin sản phẩm
                             </TitleInformation>
                             <Information>
-                                Lorem Ipsum is simply dummy text of the printing
-                                and typesetting industry. Lorem Ipsum has been
-                                the industry's standard dummy text ever since
-                                the 1500s, when an unknown printer took a galley
-                                of type and scrambled it to make a type specimen
-                                book. It has survived not only five centuries,
-                                but also the leap into electronic typesetting,
-                                remaining essentially unchanged. It was
-                                popularised in the 1960s with the release of
-                                Letraset sheets containing Lorem Ipsum passages,
-                                and more recently with desktop publishing
-                                software like Aldus PageMaker including versions
-                                of Lorem Ipsum.
+                                {productDetail?.productContent.map((item) => {
+                                    if (item.isImage === false) {
+                                        return <TextContent>{item.content}</TextContent>;
+                                    } else {
+                                        return <img src={item.content}></img>;
+                                    }
+                                })}
+                                {/* {productDetail?.map((item) => {
+                                    if (item.productContent.isImage === false) {
+                                        return item.productContent.content;
+                                    } else {
+                                        // return <img src={item.content}></img>;
+                                    }
+                                })} */}
                             </Information>
                         </InformationProduct>
                     </Detail>
@@ -218,9 +204,12 @@ const Product = () => {
         </div>
     );
 };
-
+const TextContent=styled.p`
+    padding: 10px 0px;
+    padding-right: 15px;
+`
 const Container = styled.div`
-    height: 100vh;
+    
 `;
 const Wrapper = styled.div`
     height: 100%;

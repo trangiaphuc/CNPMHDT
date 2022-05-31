@@ -49,6 +49,7 @@ const ProductByCat = () => {
         // user == null ? navigate("/login") : dispatch(addToCart(product));
         user == null ? navigate("/login") : addCart(user, product, dispatch);
     };
+    console.log(model);
     return (
         <Container>
             <Content>
@@ -79,7 +80,7 @@ const ProductByCat = () => {
                         <InfoProduct>
                             <TitleProduct>
                                 <ProductName>
-                                    <LinkDetail href={"/product/" + item?.id}>
+                                    <LinkDetail href={"/product/" + item.id}>
                                         {item?.modelName}
                                     </LinkDetail>
                                 </ProductName>
