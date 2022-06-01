@@ -1,12 +1,14 @@
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { HotProduct } from "../data";
 
 const _items = HotProduct;
 const TopHotProduct = () => {
+    const [productRandom, setProductRandom] = useState([]);
     const [itemtrans, setItemtrans] = React.useState(
         new Array(_items.length).fill(0)
     );
@@ -26,34 +28,53 @@ const TopHotProduct = () => {
             // return prev.map((item) => item - 270);
         });
     };
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/user/get-random-product"
+                );
+
+                setProductRandom(res.data.productList);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+    console.log(productRandom);
+
     return (
         <Container>
             <Content>
                 <TitleContent>Top sản phẩm HOT!</TitleContent>
                 <ArrowSlider>
-                    <SliderPrev onClick={() => prevClick()}>
+                    {/* <SliderPrev onClick={() => prevClick()}>
                         <ChevronLeftIcon1 />
                     </SliderPrev>
                     <SliderNext onClick={() => nextClick()}>
                         <ChevronRightIcon1 />
-                    </SliderNext>
+                    </SliderNext> */}
                 </ArrowSlider>
             </Content>
             <ContainerSlider>
-                {HotProduct?.map((item, idx) => (
-                    <CardProduct tran={itemtrans.at(idx)} key={idx}>
+                {productRandom?.map((item, idx) => (
+                    <CardProduct tran={itemtrans?.at(idx)} key={idx}>
                         <ContainerImage>
-                            <ImageProduct src={item.image}></ImageProduct>
+                            <ImageProduct
+                                src={item?.productImage}
+                            ></ImageProduct>
                         </ContainerImage>
                         <InfoProduct>
                             <TitleProduct>
                                 <ProductName>
                                     <LinkDetail href="#">
-                                        {item.name}
+                                        {item?.productName}
                                     </LinkDetail>
                                 </ProductName>
                                 <ProductPrice>
-                                    {item.price.toLocaleString("de-DE")}đ
+                                    {item?.salePrice?.toLocaleString("de-DE")}đ
                                 </ProductPrice>
                             </TitleProduct>
                             <Behavior>
@@ -164,7 +185,7 @@ const ContainerImage = styled.div`
 `;
 
 const ProductName = styled.h2`
-    font-size: 20px;
+    font-size: 16px;
 `;
 const Behavior = styled.div`
     display: flex;

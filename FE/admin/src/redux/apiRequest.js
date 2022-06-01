@@ -31,36 +31,10 @@ export const loginUser = async (user, dispatch, navigate) => {
         );
 
         dispatch(loginSuccess(res.data));
-        navigate("/");
+        navigate("/home");
     } catch (error) {
         // console.log(error.response.data.message);
         alert(error.response.data.message);
-    }
-};
-export const registerUser = async (user, dispatch, navigate) => {
-    dispatch(registerStart());
-    try {
-        const res = await axios.post(
-            "http://localhost:9000/general/auth/signup/",
-            {
-                username: user.username,
-                password: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phone: user.phone,
-                birthday: user.birthday,
-                gender: user.gender,
-                provinceId: user.provinceId,
-                districtId: user.districtId,
-                wardId: user.wardId,
-                userStatusId: user.userStatusId,
-            }
-        );
-        dispatch(registerSuccess(user));
-        navigate("/login");
-    } catch (error) {
-        dispatch(registerFailed());
     }
 };
 

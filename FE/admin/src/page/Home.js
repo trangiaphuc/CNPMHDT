@@ -61,13 +61,13 @@ const Home = () => {
                     </ListSubButtonManagementProduct>
                 </LeftPage>
 
-                <ListSubButtonManagementUser>
+                {/* <ListSubButtonManagementUser>
                     <ListSubButtonManagementUser>
                         <SubButtonManagementUser>
                             &#8226; Xem báo cáo sản phẩm
                         </SubButtonManagementUser>
                     </ListSubButtonManagementUser>
-                </ListSubButtonManagementUser>
+                </ListSubButtonManagementUser> */}
 
                 <RightPage></RightPage>
             </PageContainer>
@@ -107,10 +107,12 @@ const Container = styled.div`
 const LeftPage = styled.div`
     width: 350px;
     height: 100vh;
-    background-color: red;
+    border: 1px solid #c4c4c4;
+    /* background-color: red; */
 `;
 const NavBar = styled.div`
     height: 10%;
+    background-color: #ff3008;
 `;
 const PageContainer = styled.div``;
 const RightPage = styled.div``;
