@@ -352,7 +352,7 @@ module.exports = {
             // /modle 4
             {
                 productName: "Nubia Red Magic 7 Pro 12-256GB",
-                salePrice: "19.050.000",
+                salePrice: "19050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -376,7 +376,7 @@ module.exports = {
             },
             {
                 productName: "Nubia Red Magic 7 Pro 12-256GB",
-                salePrice: "19.050.000",
+                salePrice: "19050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -400,7 +400,7 @@ module.exports = {
             },
             {
                 productName: "Nubia Red Magic 7 Pro 12-256GB",
-                salePrice: "19.050.000",
+                salePrice: "19050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -424,7 +424,7 @@ module.exports = {
             },
             {
                 productName: "Nubia Red Magic 7 Pro 12-256GB",
-                salePrice: "19.050.000",
+                salePrice: "19050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -448,7 +448,7 @@ module.exports = {
             },
             {
                 productName: "Xiaomi Redmi K50 Gaming Mercedes AMG Edition",
-                salePrice: "16.550.000 ",
+                salePrice: "16550000 ",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -472,7 +472,7 @@ module.exports = {
             },
             {
                 productName: "Xiaomi Redmi K50 Gaming Mercedes AMG Edition",
-                salePrice: "16.550.000 ",
+                salePrice: "16550000 ",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "12GB",
@@ -496,7 +496,7 @@ module.exports = {
             },
             {
                 productName: "Asus ROG Phone 5 (Snap888) 8-128GB",
-                salePrice: "14.050.000",
+                salePrice: "14050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "8GB",
@@ -520,7 +520,7 @@ module.exports = {
             },
             {
                 productName: "Asus ROG Phone 5 (Snap888) 8-128GB",
-                salePrice: "14.050.000",
+                salePrice: "14050000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "8GB",
@@ -543,8 +543,8 @@ module.exports = {
                 productColorId: 1,
             },
             {
-                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi",
-                salePrice: "8.650.000",
+                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi)",
+                salePrice: "8650000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "4GB",
@@ -567,8 +567,8 @@ module.exports = {
                 productColorId: null,
             },
             {
-                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi",
-                salePrice: "8.650.000",
+                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi)",
+                salePrice: "8650000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "4GB",
@@ -591,8 +591,8 @@ module.exports = {
                 productColorId: 1,
             },
             {
-                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi",
-                salePrice: "8.650.000",
+                productName: "Samsung Galaxy Tab S7 FE (4G, Wifi)",
+                salePrice: "8650000",
                 isRequestIMEI: true,
                 VAT: 10,
                 RAM: "4GB",

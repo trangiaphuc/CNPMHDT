@@ -112,8 +112,10 @@ exports.getProductWithModel = (req, res) => {
                     });
                 }
 
-                const currentInstockStore = await productCurrentInstocks.storeId;
-                const currentInstockQuantity = productCurrentInstocks.quantity;
+                const currentInstockStore =
+                    productCurrentInstocks == null ? -1 : productCurrentInstocks.storeId;
+                const currentInstockQuantity =
+                    productCurrentInstocks == null ? 0 : productCurrentInstocks.quantity;
 
                 // console.log({ bePhucDeThuong: productCurrentInstocks.dataValues });
 
