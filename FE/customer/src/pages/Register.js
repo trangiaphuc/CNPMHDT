@@ -7,12 +7,15 @@ import Navbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../redux/apiRequest";
+import { Alert } from "@mui/material";
 
 const Register = () => {
-    const [name, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [phone, setPhone] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
     const dispatch = useDispatch();
@@ -20,12 +23,25 @@ const Register = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        const newUser = {
-            email: email,
-            password: password,
-            username: username,
-        };
-        registerUser(newUser, dispatch, navigate);
+        if (password !== confirmPassword) {
+            Alert("confirmPass không đúng");
+        } else {
+            const newUser = {
+                username: username,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                birthday: "",
+                gender: 1,
+                provinceId: 1,
+                districtId: 1,
+                wardId: 1,
+                userStatusId: 1,
+            };
+            registerUser(newUser, dispatch, navigate);
+        }
     };
     return (
         <div>
@@ -37,8 +53,13 @@ const Register = () => {
                     <Form onSubmit={handleRegister}>
                         <Input
                             type="text"
-                            placeholder="name"
-                            onChange={(e) => setName(e.target.value)}
+                            placeholder="FirstName"
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="LastName"
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                         <Input
                             type="text"
@@ -49,6 +70,11 @@ const Register = () => {
                             type="text"
                             placeholder="email"
                             onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            type="text"
+                            placeholder="phone"
+                            onChange={(e) => setPhone(e.target.value)}
                         />
                         <Input
                             type="password"

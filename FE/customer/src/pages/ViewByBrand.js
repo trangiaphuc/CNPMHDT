@@ -4,19 +4,39 @@ import axios from "axios";
 
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { addToCart } from "../redux/cartSlice";
 import { addCart } from "../redux/apiRequestCart";
-
-const ProductByCat = () => {
-    const [brandList, setBrandList] = useState([]);
-    const [model, setModel] = useState([]);
-    const [product, setProduct] = useState([]);
-    const [chooseBrand, setChooseBrand] = useState({});
+import Navbar from "../components/Navbar";
+import Categories from "../components/Categories";
+const ViewByBrand = () => {
     const user = useSelector((state) => state.auth.login.currentUser);
-
+    const cart = useSelector((state) => state.cart);
+    console.log(cart.searchText);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const [mainGroup, setMainGroup] = useState([]);
+    const [branList, setBrandList] = useState([]);
+    const [allModel, setAllModel] = useState([]);
+
+    const location = useLocation();
+    const mainGroupId = location.pathname.split("/")[2];
+    const brandId = location.pathname.split("/")[3];
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-maingroups-list"
+                );
+                setMainGroup(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
 
     useEffect(() => {
         const test = async () => {
@@ -31,54 +51,36 @@ const ProductByCat = () => {
         };
         test();
     }, []);
+
     useEffect(() => {
         const test = async () => {
             try {
                 const res = await axios.get(
                     "http://localhost:9000/user/get-all-product-model"
                 );
-                setModel(res.data.result);
+                setAllModel(res.data.result);
             } catch (err) {
                 console.log(err);
             }
         };
         test();
     }, []);
-    // console.log(model);
-    // console.log(Object.keys(chooseBrand).length);
+
     const handleAddToCart = (product) => {
-        // user == null ? navigate("/login") : dispatch(addToCart(product));
         user == null ? navigate("/login") : addCart(user, product, dispatch);
     };
+    console.log(allModel);
     return (
-        <Container>
-            <Content>
-                <ProductCat>
-                    <Category>Hãng</Category>
-                    <CategoryItem onClick={() => setChooseBrand({})}>
-                        View all
-                    </CategoryItem>
-                    {brandList?.map((item) => (
-                        <CategoryItem
-                            key={item.id}
-                            onClick={() => setChooseBrand(item)}
-                        >
-                            {item.brandName}
-                        </CategoryItem>
-                    ))}
-                </ProductCat>
-                <SortPrice>
-                    <SortByPrice>
-                        <HighToLow>Từ cao đến thấp</HighToLow>
-                        <LowToHigh>Từ thấp đến cao</LowToHigh>
-                    </SortByPrice>
-                </SortPrice>
-            </Content>
-
-            <ProductList>
-                {model?.map((item, idx) => {
-                    if (Object.keys(chooseBrand).length !== 0) {
-                        if (item?.productModel?.brandId === chooseBrand.id) {
+        <div>
+            <Navbar />
+            <Categories />
+            <Page>
+                <ProductList>
+                    {allModel.map((item) => {
+                        if (
+                            item?.productModel?.brandId == brandId &&
+                            item?.productModel?.maingroupId == mainGroupId
+                        ) {
                             return (
                                 <CardProduct key={item?.id}>
                                     <ContainerImage>
@@ -122,94 +124,12 @@ const ProductByCat = () => {
                                 </CardProduct>
                             );
                         }
-                    } else {
-                        return (
-                            <CardProduct key={item?.id}>
-                                <ContainerImage>
-                                    <ImageProduct
-                                        src={item.productModel?.productImage}
-                                    ></ImageProduct>
-                                </ContainerImage>
-                                <InfoProduct>
-                                    <TitleProduct>
-                                        <ProductName>
-                                            <LinkDetail
-                                                href={"/product/" + item?.id}
-                                            >
-                                                {item?.modelName}
-                                            </LinkDetail>
-                                        </ProductName>
-                                        <ProductPrice>
-                                            {item?.productModel?.salePrice.toLocaleString(
-                                                "de-DE"
-                                            )}
-                                            đ
-                                        </ProductPrice>
-                                    </TitleProduct>
-                                    <Behavior>
-                                        <BuyProduct>Mua</BuyProduct>
-                                        <AddCart
-                                            onClick={() =>
-                                                handleAddToCart(
-                                                    item?.productModel
-                                                )
-                                            }
-                                        >
-                                            <AddShoppingCartIcon />
-                                        </AddCart>
-                                    </Behavior>
-                                </InfoProduct>
-                            </CardProduct>
-                        );
-                    }
-                })}
-            </ProductList>
-        </Container>
+                    })}
+                </ProductList>
+            </Page>
+        </div>
     );
 };
-
-export default ProductByCat;
-
-const Container = styled.div`
-    width: 100%;
-    margin-top: 20px;
-`;
-const Content = styled.div`
-    font-size: 19px;
-    display: flex;
-`;
-const ProductCat = styled.div`
-    width: 88%;
-    height: auto;
-    display: flex;
-    flex-wrap: wrap;
-`;
-const Category = styled.span`
-    box-sizing: border-box;
-    padding: 0px 10px;
-`;
-
-const CategoryItem = styled.span`
-    box-sizing: border-box;
-    color: #ff3008;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0px 10px;
-`;
-const SortPrice = styled.div`
-    width: 12%;
-`;
-const SortByPrice = styled.select`
-    border-radius: 0px;
-    float: right;
-    font-size: 18px;
-    border: none;
-`;
-const HighToLow = styled.option`
-    border-radius: 0px;
-`;
-const LowToHigh = styled.option``;
-
 const ProductList = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -256,7 +176,7 @@ const ContainerImage = styled.div`
 `;
 
 const ProductName = styled.h2`
-    font-size: 18px;
+    font-size: 16px;
 `;
 const Behavior = styled.div`
     display: flex;
@@ -315,3 +235,8 @@ const LinkDetail = styled.a`
     text-decoration: none;
     color: black;
 `;
+const Page = styled.div`
+    width: 1350px;
+    margin: auto;
+`;
+export default ViewByBrand;

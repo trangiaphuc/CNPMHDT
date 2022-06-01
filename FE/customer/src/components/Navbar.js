@@ -7,7 +7,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -34,11 +34,10 @@ const Navbar = () => {
 
     const handleSearch = () => {
         if (textSearch === "") {
-            alert("Nhập từ khoá tìm kiếm")
-        }
-        else{
-            navigate("/search/" + textSearch)
-            dispatch(searchProduct(textSearch))
+            alert("Nhập từ khoá tìm kiếm");
+        } else {
+            navigate("/search/" + textSearch);
+            dispatch(searchProduct(textSearch));
         }
     };
 

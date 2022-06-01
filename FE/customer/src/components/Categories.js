@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import styled from "styled-components";
-import { subProduct, subProduct2 } from "../data";
 
 const Categories = () => {
     const [mainGroup, setMainGroup] = useState([]);
+    const [branList, setBrandList] = useState([]);
     useEffect(() => {
         const test = async () => {
             try {
@@ -19,6 +19,21 @@ const Categories = () => {
         };
         test();
     }, []);
+
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.get(
+                    "http://localhost:9000/general/get-brand-list"
+                );
+                setBrandList(res.data.result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+
     return (
         <Container>
             <ListMain>
@@ -42,43 +57,56 @@ const Categories = () => {
                                 </TitleType>
 
                                 <ListTypeName>
-                                    {subProduct.map((itemSub, i, a) => {
-                                        if (itemMain.id === itemSub.idMain) {
-                                            return (
-                                                <SubItem
-                                                    key={itemSub.id}
-                                                    last="0"
+                                    {branList.map((itemSub, i, a) => {
+                                        return (
+                                            <SubItem key={itemSub.id} last="0">
+                                                <TextSubProduct
+                                                    href={
+                                                        "/viewbybrand/" +
+                                                        itemMain.id +
+                                                        "/" +
+                                                        itemSub.id
+                                                    }
                                                 >
-                                                    <TextSubProduct href="#">
-                                                        {itemSub.name}
-                                                    </TextSubProduct>
-                                                </SubItem>
-                                            );
-                                        }
+                                                    {itemSub.brandName}
+                                                </TextSubProduct>
+                                            </SubItem>
+                                        );
                                     })}
                                 </ListTypeName>
                             </LeftType>
                             <RightType>
                                 <TypeName>Mức giá</TypeName>
                                 <SubItem>
-                                    <TextSubProduct href="#">Dưới 1 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Dưới 1 triệu
+                                    </TextSubProduct>
                                 </SubItem>
                                 <SubItem>
-                                    <TextSubProduct href="#">Dưới 2 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Dưới 2 triệu
+                                    </TextSubProduct>
                                 </SubItem>
                                 <SubItem>
-                                    <TextSubProduct href="#">Dưới 3 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Dưới 3 triệu
+                                    </TextSubProduct>
                                 </SubItem>
                                 <SubItem>
-                                    <TextSubProduct href="#">Dưới 5 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Dưới 5 triệu
+                                    </TextSubProduct>
                                 </SubItem>
                                 <SubItem>
-                                    <TextSubProduct href="#">Dưới 10 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Dưới 10 triệu
+                                    </TextSubProduct>
                                 </SubItem>
                                 <SubItem>
-                                    <TextSubProduct href="#">Trên 10 triệu</TextSubProduct>
+                                    <TextSubProduct href="#">
+                                        Trên 10 triệu
+                                    </TextSubProduct>
                                 </SubItem>
-                                
                             </RightType>
                         </ListSub>
                     </MainItem>
@@ -225,9 +253,4 @@ const ImageMainGroup = styled.img`
     margin-top: 3px;
     height: 70%;
     object-fit: cover;
-`;
-const LinkMainGroup = styled.a`
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
 `;

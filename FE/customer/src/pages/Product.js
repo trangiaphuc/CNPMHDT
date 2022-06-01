@@ -3,8 +3,10 @@ import styled from "styled-components";
 import Categories from "../components/Categories";
 import Navbar from "../components/Navbar";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart } from "../redux/apiRequestCart";
 
 const Product = () => {
     const location = useLocation();
@@ -13,6 +15,12 @@ const Product = () => {
     const [product, setProduct] = useState({});
     const [index, setIndex] = useState(0);
     const modelId = location.pathname.split("/")[2];
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const user = useSelector((state) => state.auth.login.currentUser);
+
     const storeId = 1;
     useEffect(() => {
         const test = async () => {
@@ -42,6 +50,11 @@ const Product = () => {
             }
         });
     }
+    const handleAddToCart = (product) => {
+        // user == null ? navigate("/login") : dispatch(addToCart(product));
+        user == null ? navigate("/login") : addCart(user, product, dispatch);
+    };
+    console.log(productList[index]);
     return (
         <div>
             <Navbar />
@@ -103,7 +116,11 @@ const Product = () => {
 
                                 <BuyAndAddCart>
                                     <Buy href="#">Mua</Buy>
-                                    <AddToCart>
+                                    <AddToCart
+                                        onClick={() =>
+                                            handleAddToCart(productList[index])
+                                        }
+                                    >
                                         <AddCartIcon />
                                     </AddToCart>
                                 </BuyAndAddCart>
@@ -116,20 +133,201 @@ const Product = () => {
                             <Information>
                                 {productDetail?.productContent.map((item) => {
                                     if (item.isImage === false) {
-                                        return <TextContent>{item.content}</TextContent>;
+                                        return (
+                                            <TextContent>
+                                                {item.content}
+                                            </TextContent>
+                                        );
                                     } else {
                                         return <img src={item.content}></img>;
                                     }
                                 })}
-                                {/* {productDetail?.map((item) => {
-                                    if (item.productContent.isImage === false) {
-                                        return item.productContent.content;
-                                    } else {
-                                        // return <img src={item.content}></img>;
-                                    }
-                                })} */}
                             </Information>
                         </InformationProduct>
+
+                        <SpecificationsProduct>
+                            <SpecificationsTitle>
+                                Thông số kĩ thuật
+                            </SpecificationsTitle>
+                            {productDetail?.productInfomation.length===0?<></>:(<TableContainer>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Màn hình:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.screenType
+                                                }
+                                                ,{" "}
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.screenColor
+                                                }
+                                                ,{" "}
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.resolution
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Hệ điều hành:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.operatingSystem
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Camera Sau:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.rearCamera
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Camera trước:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.frontCamera
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                CPU:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.chipset
+                                                }
+                                                ,{" speed: "}
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.CPUSpeed
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                RAM:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]?.RAM
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Bộ nhớ trong:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]?.ROM
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Thẻ Sim:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.simType
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Dung lượng pin:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.batteryCapacity
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableColumnLeft>
+                                            <TextSpecifications>
+                                                Thiết kế:
+                                            </TextSpecifications>
+                                        </TableColumnLeft>
+                                        <TableColumnRight>
+                                            <TextSpecifications>
+                                                {
+                                                    productDetail
+                                                        ?.productInfomation[0]
+                                                        ?.design
+                                                }
+                                            </TextSpecifications>
+                                        </TableColumnRight>
+                                    </TableRow>
+                                </TableContainer>)}
+                        </SpecificationsProduct>
                     </Detail>
                     <SameProduct>
                         <Title>Sản phẩm tương tự</Title>
@@ -204,13 +402,50 @@ const Product = () => {
         </div>
     );
 };
-const TextContent=styled.p`
+
+const SpecificationsProduct = styled.div``;
+const SpecificationsTitle = styled.p`
+    color: #ff3008;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 20px;
+`;
+const TableContainer = styled.div`
+    /* background-color: red; */
+    width: 600px;
+    /* height: 600px; */
+    margin: auto;
+    border-left: solid 1px #c4c4c4;
+    border-right: solid 1px #c4c4c4;
+    border-top: solid 1px #c4c4c4;
+    margin-bottom: 50px;
+`;
+const TableRow = styled.div`
+    display: flex;
+`;
+const TableColumnLeft = styled.div`
+    flex: 2;
+    border-bottom: solid 1px #c4c4c4;
+    font-weight: 600;
+`;
+const TableColumnRight = styled.div`
+    flex: 5;
+    border-bottom: solid 1px #c4c4c4;
+    border-left: solid 1px #c4c4c4;
+`;
+
+const TextSpecifications = styled.p`
+    box-sizing: border-box;
+    font-size: 18px;
+    padding: 10px;
+`;
+
+const TextContent = styled.p`
     padding: 10px 0px;
     padding-right: 15px;
-`
-const Container = styled.div`
-    
 `;
+const Container = styled.div``;
 const Wrapper = styled.div`
     height: 100%;
     width: 1350px;
