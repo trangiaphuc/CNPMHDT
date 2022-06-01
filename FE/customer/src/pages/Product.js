@@ -14,34 +14,25 @@ const Product = () => {
     const [colorList, setColorList] = useState([]);
     const [product, setProduct] = useState({});
     const [index, setIndex] = useState(0);
-    const modelId = location.pathname.split("/")[2];
+    const [model, setModel] = useState([]);
+    const modelIdStr = location.pathname.split("/")[2];
+    const proIdStr = location.pathname.split("/")[3];
 
+    const modelId = parseInt(modelIdStr);
+    const proId = parseInt(proIdStr)
+
+    console.log("model "+modelId)
+    console.log("product "+proId);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const user = useSelector((state) => state.auth.login.currentUser);
 
     const storeId = 1;
-    useEffect(() => {
-        const test = async () => {
-            try {
-                const res = await axios.post(
-                    "http://localhost:9000/user/get-all-product-by-model",
-                    {
-                        modelId,
-                        storeId,
-                    }
-                );
-                setColorList(res.data.productColorList);
-                setProductList(res.data.productList);
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        test();
-    }, [modelId]);
+    
+
+
     const productDetail = productList[0];
-    console.log(productDetail);
     function handleChangeColor(proId) {
         productList.map((item, i) => {
             if (item.id === proId) {
@@ -51,10 +42,29 @@ const Product = () => {
         });
     }
     const handleAddToCart = (product) => {
-        // user == null ? navigate("/login") : dispatch(addToCart(product));
         user == null ? navigate("/login") : addCart(user, product, dispatch);
     };
     console.log(productList[index]);
+    useEffect(() => {
+        const test = async () => {
+            try {
+                const res = await axios.post(
+                    "http://localhost:9000/user/get-all-product-by-model",
+                    {
+                        modelId: modelId,
+                        storeId: storeId,
+                        productModelId: proId,
+                    }
+                );
+                setColorList(res.data.productColorList);
+                setProductList(res.data.productList);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        test();
+    }, []);
+
     return (
         <div>
             <Navbar />
@@ -149,7 +159,10 @@ const Product = () => {
                             <SpecificationsTitle>
                                 Thông số kĩ thuật
                             </SpecificationsTitle>
-                            {productDetail?.productInfomation.length===0?<></>:(<TableContainer>
+                            {productDetail?.productInfomation.length === 0 ? (
+                                <></>
+                            ) : (
+                                <TableContainer>
                                     <TableRow>
                                         <TableColumnLeft>
                                             <TextSpecifications>
@@ -258,7 +271,8 @@ const Product = () => {
                                             <TextSpecifications>
                                                 {
                                                     productDetail
-                                                        ?.productInfomation[0]?.RAM
+                                                        ?.productInfomation[0]
+                                                        ?.RAM
                                                 }
                                             </TextSpecifications>
                                         </TableColumnRight>
@@ -273,7 +287,8 @@ const Product = () => {
                                             <TextSpecifications>
                                                 {
                                                     productDetail
-                                                        ?.productInfomation[0]?.ROM
+                                                        ?.productInfomation[0]
+                                                        ?.ROM
                                                 }
                                             </TextSpecifications>
                                         </TableColumnRight>
@@ -326,7 +341,8 @@ const Product = () => {
                                             </TextSpecifications>
                                         </TableColumnRight>
                                     </TableRow>
-                                </TableContainer>)}
+                                </TableContainer>
+                            )}
                         </SpecificationsProduct>
                     </Detail>
                     <SameProduct>

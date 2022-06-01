@@ -1,12 +1,28 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { logout } from "../redux/apiRequest";
 
 const Home = () => {
     const [displayManaOrder, setDisplayManaOrder] = useState(0);
     const [displayManaProduct, setDisplayManaProduct] = useState(0);
+    const user = useSelector((state) => state.auth.login.currentUser);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout(dispatch, navigate);
+        if (user === null) {
+            navigate("/login");
+        }
+    };
     return (
         <Container>
-            <NavBar></NavBar>
+            <NavBar>
+                <Logout onClick={handleLogout}>Logout</Logout>
+            </NavBar>
             <PageContainer>
                 <LeftPage>
                     <MainButtonManagementOrder
@@ -113,6 +129,16 @@ const LeftPage = styled.div`
 const NavBar = styled.div`
     height: 10%;
     background-color: #ff3008;
+`;
+
+const Logout = styled.span`
+    box-sizing: border-box;
+    float: right;
+    padding: 5px;
+    padding-right: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
 `;
 const PageContainer = styled.div``;
 const RightPage = styled.div``;

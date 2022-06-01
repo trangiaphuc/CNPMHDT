@@ -103,7 +103,7 @@ module.exports = {
             {
                 productId: 15,
                 content: "/resources/images/productContents/nubia-redmagic-7-pro-1.jpg",
-                isImage: false,
+                isImage: true,
             },
             {
                 productId: 15,
@@ -115,7 +115,7 @@ module.exports = {
             {
                 productId: 15,
                 content: "/resources/images/productContents/nubia-redmagic-7-pro.jpg",
-                isImage: false,
+                isImage: true,
             },
             {
                 productId: 15,
@@ -134,7 +134,7 @@ module.exports = {
             {
                 productId: 19,
                 content: "/resources/images/productContents/xiaomi-redmi-k50-gaming-mercedes-amg-edition-15.jpg",
-                isImage: false,
+                isImage: true,
             },
             {
                 productId: 19,
@@ -161,7 +161,7 @@ module.exports = {
             {
                 productId: 21,
                 content: "/resources/images/productContents/ezgif-3-1aaf6f62cac0.jpg",
-                isImage: false,
+                isImage: true,
             },
 
             //model 7
@@ -176,7 +176,7 @@ module.exports = {
             {
                 productId: 23,
                 content: "/resources/images/productContents/samsung-galaxy-tab-s7-fan-editon-01.jpg",
-                isImage: false,
+                isImage: true,
             },
             //model 8
         ]);

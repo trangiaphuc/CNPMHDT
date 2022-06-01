@@ -44,7 +44,7 @@ const ProductByCat = () => {
         };
         test();
     }, []);
-    // console.log(model);
+    console.log(model);
     // console.log(Object.keys(chooseBrand).length);
     const handleAddToCart = (product) => {
         // user == null ? navigate("/login") : dispatch(addToCart(product));
@@ -93,7 +93,10 @@ const ProductByCat = () => {
                                             <ProductName>
                                                 <LinkDetail
                                                     href={
-                                                        "/product/" + item?.id
+                                                        "/product/" +
+                                                        item?.id +
+                                                        "/" +
+                                                        item?.modelProductId
                                                     }
                                                 >
                                                     {item?.modelName}
@@ -134,7 +137,12 @@ const ProductByCat = () => {
                                     <TitleProduct>
                                         <ProductName>
                                             <LinkDetail
-                                                href={"/product/" + item?.id}
+                                                href={
+                                                    "/product/" +
+                                                    item?.id +
+                                                    "/" +
+                                                    item?.modelProductId
+                                                }
                                             >
                                                 {item?.modelName}
                                             </LinkDetail>

@@ -77,12 +77,12 @@ const TopHotProduct = () => {
                                     {item?.salePrice?.toLocaleString("de-DE")}đ
                                 </ProductPrice>
                             </TitleProduct>
-                            <Behavior>
+                            {/* <Behavior>
                                 <BuyProduct>Mua</BuyProduct>
                                 <AddCart>
                                     <AddShoppingCartIcon />
                                 </AddCart>
-                            </Behavior>
+                            </Behavior> */}
                         </InfoProduct>
                     </CardProduct>
                 ))}
