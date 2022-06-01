@@ -88,10 +88,10 @@ exports.getProductWithModel = (req, res) => {
                 });
 
                 const productInfo = await ProductInfo.findAll({
-                    where: { productId: req.body.modelId },
+                    where: { productId: req.body.productModelId },
                 });
                 const productContentList = await ProductContent.findAll({
-                    where: { productId: req.body.modelId },
+                    where: { productId: req.body.productModelId },
                 });
 
                 const productAccessoryGroup = await AccessoryGroup.findAll({
@@ -189,11 +189,18 @@ exports.getRandomProductWithModel = (req, res) => {
     }).then((productsList) => {
         if (productsList.length) {
             const productColorList = [];
-            productsList.forEach((product) => {
+            productsList.forEach(async(product) => {
+                const model = await Model.findOne({
+                    where: { modelProductId: product.id },
+                });
+                // const modelId = model.id;
+
                 const productImage = product.image;
                 const brand = product.brand;
                 // const productColor = product.productColor;
                 const quantityUnit = product.quantityUnit;
+
+                // console.log(model.id);
 
                 if (productImage) {
                     const image = fs.readFileSync(__basedir + productImage.imageUri);
@@ -212,7 +219,7 @@ exports.getRandomProductWithModel = (req, res) => {
                     // product.setDataValue("productColorName", colorName);
                     // product.setDataValue("productColorCode", colorCode);
                     product.setDataValue("productImage", base64ProductImage);
-
+                    product.modelId = model;
                     if (productsList.indexOf(product) == productsList.length - 1) {
                         // const result = {};
                         // result.setDataValue("productList", productsList);

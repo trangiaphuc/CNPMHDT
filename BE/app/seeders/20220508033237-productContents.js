@@ -179,16 +179,6 @@ module.exports = {
                 isImage: false,
             },
             //model 8
-            {
-                productId: 19,
-                content: ` `,
-                isImage: false,
-            },
-            {
-                productId: 19,
-                content: ` `,
-                isImage: false,
-            },
         ]);
     },
 
